@@ -2765,7 +2765,10 @@ export default function App() {
           </div>
         </div>
       ) : !isLoggedIn ? (
-        <div className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800 relative overflow-hidden">
+        <div 
+          className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800 relative overflow-hidden"
+          style={{ backgroundColor: "#a13f3f", borderColor: "#4073c0" }}
+        >
           
           {/* Guest Challenge Invitation Card Overlay */}
           {showChallengeLanding && activeChallenge && (
@@ -2916,11 +2919,14 @@ export default function App() {
               <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto rounded-full mt-4"></div>
             </div>
 
-            <div className="bg-white/95 backdrop-blur-md rounded-[32px] border border-pink-100/50 p-6 md:p-8 shadow-[0_25px_60px_rgba(236,72,153,0.06)] relative overflow-hidden space-y-5">
+            <div 
+              className="bg-white/95 backdrop-blur-md rounded-[32px] border border-pink-100/50 p-6 md:p-8 shadow-[0_25px_60px_rgba(236,72,153,0.06)] relative overflow-hidden space-y-5"
+              style={{ backgroundColor: "#f7e7fa" }}
+            >
               <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-pink-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-              <div className="text-center space-y-1">
+              <div className="text-center space-y-1" style={{ borderColor: "#3d4657", color: "#6380b2" }}>
                 <span className="text-xs bg-purple-100 text-purple-950 font-black px-3.5 py-1.5 rounded-full border border-purple-200 inline-block">
                   بوابة الطالب الذكية 🎓
                 </span>
@@ -2955,6 +2961,7 @@ export default function App() {
                       ? "bg-white text-purple-950 shadow-sm"
                       : "text-slate-500 hover:text-slate-800"
                   }`}
+                  style={{ color: "#b82f94" }}
                 >
                   ➕ حساب جديد
                 </button>
@@ -2986,6 +2993,7 @@ export default function App() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-xs font-bold focus:bg-white focus:ring-2 focus:ring-purple-400 outline-none transition-all text-right"
+                      style={{ color: "#210606" }}
                     />
                   </div>
 
@@ -3067,6 +3075,7 @@ export default function App() {
                     type="submit"
                     disabled={authLoading}
                     className="w-full mt-3 py-4 bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white font-extrabold rounded-2xl text-xs shadow-md hover:shadow-purple-500/15 transition-all text-center flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                    style={{ backgroundColor: "#7e38a4" }}
                   >
                     {authLoading ? (
                       <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
@@ -3139,6 +3148,7 @@ export default function App() {
                     onClick={handleGoogleSignIn}
                     disabled={authLoading}
                     className="w-full py-4 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-extrabold rounded-2xl text-xs shadow-sm transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+                    style={{ backgroundColor: "#f9f8fc", color: "#844358" }}
                   >
                     <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
