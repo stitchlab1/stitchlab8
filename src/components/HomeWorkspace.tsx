@@ -1399,11 +1399,11 @@ export default function HomeWorkspace({
           
           if (isSpeechMatched(currentWord.word, transcript)) {
             setSpeechScore(true);
-            setSpeechStatus(`Great job! 🎉 مستواك رائع ومطابق! سمعنا: "${currentWord.word}" ✓`);
+            setSpeechStatus(`نطق صحيح وممتاز! مستواك رائع. سمعنا: "${currentWord.word}" ✓`);
             playAudioFeedback(true);
           } else {
             setSpeechScore(false);
-            setSpeechStatus(`Try again! ⚠️ لم يتطابق تماماً. لقد سمعنا: "${currentWord.word}". حاول مرة أخرى!`);
+            setSpeechStatus(`نطق غير صحيح! حاول مرة أخرى. لم نسمع: "${currentWord.word}" ⚠️`);
             playAudioFeedback(false);
             setIncorrectSpeechAttempts(prev => {
               const nextVal = prev + 1;
