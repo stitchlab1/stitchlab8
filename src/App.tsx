@@ -2556,7 +2556,7 @@ export default function App() {
               )}
 
               {authSuccessMessage && (
-                <div className="p-4 rounded-2xl text-xs bg-emerald-50 border border-emerald-100 text-emerald-800 font-bold leading-relaxed text-right animate-fadeIn">
+                <div className="p-4 rounded-2xl text-xs bg-pink-50 border border-pink-100 text-pink-800 font-bold leading-relaxed text-right animate-fadeIn">
                   {authSuccessMessage}
                 </div>
               )}
@@ -2672,8 +2672,8 @@ export default function App() {
               )}
 
               {googleSuccessMsg ? (
-                <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-100 text-emerald-800 text-center text-xs font-black animate-pulse flex flex-col items-center justify-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-black">✓</div>
+                <div className="p-5 rounded-2xl bg-pink-50 border border-pink-100 text-pink-800 text-center text-xs font-black animate-pulse flex flex-col items-center justify-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-pink-500 text-white flex items-center justify-center text-xs font-black">✓</div>
                   <span>{googleSuccessMsg} 🌸</span>
                 </div>
               ) : (
@@ -2975,7 +2975,7 @@ export default function App() {
               )}
 
               {authSuccessMessage && (
-                <div className="p-4 rounded-2xl text-[11px] bg-emerald-50 border border-emerald-100 text-emerald-800 font-bold leading-relaxed text-right animate-fadeIn">
+                <div className="p-4 rounded-2xl text-[11px] bg-pink-50 border border-pink-100 text-pink-800 font-bold leading-relaxed text-right animate-fadeIn">
                   🎉 {authSuccessMessage}
                 </div>
               )}
@@ -3783,16 +3783,16 @@ export default function App() {
                     </button>
                   </div>
                 ) : (
-                  <div className="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100 space-y-3">
+                  <div className="bg-purple-50/60 p-4 rounded-2xl border border-purple-150 space-y-3">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-                      <span className="text-xs font-black text-emerald-900">🟢 متصل بنجاح بمساحتك الخاصة على Drive</span>
+                      <span className="w-2 rounded-full bg-purple-500 animate-pulse shrink-0"></span>
+                      <span className="text-xs font-black text-purple-900">🟣 متصل بنجاح بمساحتك الخاصة على Drive</span>
                     </div>
 
-                    <div className="bg-white/80 rounded-xl p-3 border border-emerald-100/40 space-y-1.5 text-[11px] font-bold text-slate-700">
+                    <div className="bg-white/80 rounded-xl p-3 border border-purple-100/40 space-y-1.5 text-[11px] font-bold text-slate-700">
                       <div className="flex justify-between border-b border-dashed border-slate-100 pb-1.5 text-slate-500">
                         <span>النسخة الاحتياطية المتوفرة:</span>
-                        <span className="text-emerald-950 font-black">
+                        <span className="text-purple-950 font-black">
                           {cloudDriveBackup ? "موجودة ☁️" : "لا توجد نسخة سحابية"}
                         </span>
                       </div>
@@ -4043,7 +4043,7 @@ export default function App() {
                                   <span className="text-[9.5px] text-slate-450 block font-bold truncate max-w-[170px]">{cl.email || "بريد غير محدد"}</span>
                                 </div>
                               </div>
-                              <span className="text-[9.5px] bg-emerald-50 text-emerald-700 border border-emerald-100/60 px-2 py-0.5 rounded-lg font-extrabold leading-none shrink-0">
+                              <span className="text-[9.5px] bg-pink-50 text-pink-700 border border-pink-100 px-2 py-0.5 rounded-lg font-extrabold leading-none shrink-0">
                                 منضم في صفي ✓
                               </span>
                             </div>
@@ -4104,12 +4104,12 @@ export default function App() {
                         }}
                         className={`py-1.5 px-3 rounded-xl transition-all shadow-md active:scale-95 flex items-center justify-center cursor-pointer gap-1 text-xs font-black text-white ${
                           copiedUid 
-                            ? "bg-emerald-600 hover:bg-emerald-700" 
+                            ? "bg-purple-600 hover:bg-purple-700" 
                             : "bg-gradient-to-r from-purple-600 via-pink-500 to-slate-500 hover:opacity-95"
                         }`}
                         title="نسخ الرقم المميز"
                       >
-                        {copiedUid ? <Sparkles className="w-3 h-3 text-emerald-100 animate-spin" /> : <Copy className="w-3 h-3" />}
+                        {copiedUid ? <Sparkles className="w-3 h-3 text-purple-100 animate-spin" /> : <Copy className="w-3 h-3" />}
                         <span>{copiedUid ? "تم النسخ! 📋" : "نسخ"}</span>
                       </button>
                     </div>
