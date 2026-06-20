@@ -2131,7 +2131,7 @@ export default function HomeWorkspace({
               <div className="text-right">
                 <h4 className="text-xs font-black text-white">ثبّت تطبيق StitchLab على هاتف الموبايل 📲</h4>
                 <p className="text-[10px] text-purple-100 font-semibold leading-relaxed">
-                  احصل على أفضل تجربة تعليمية متوافقة بالكامل مع تطبيق متجر Google Play!
+                  احصل على أفضل تجربة تعليمية متوافقة بالكامل مع المعايير العالمية
                 </p>
               </div>
             </div>
