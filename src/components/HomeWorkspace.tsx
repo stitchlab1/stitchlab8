@@ -1027,6 +1027,16 @@ export default function HomeWorkspace({
         : [...sessionSkippedWords, wKey];
       setSessionSkippedWords(nextSessionSkipped);
 
+      // Add immediately to global skippedWordKeys to sync to settings/clouds instantly
+      let updatedSkippedGlobal = [...skippedWordKeys];
+      if (!updatedSkippedGlobal.includes(wKey)) {
+        updatedSkippedGlobal.push(wKey);
+        if (setSkippedWordKeys) {
+          setSkippedWordKeys(updatedSkippedGlobal);
+        }
+        localStorage.setItem("stitchlab_skipped_word_keys", JSON.stringify(updatedSkippedGlobal));
+      }
+
       // Remove from completed
       let updatedCompleted = [...completedWordKeys];
       if (updatedCompleted.includes(wKey)) {
@@ -1061,7 +1071,7 @@ export default function HomeWorkspace({
           onForceSaveProgress({ 
             completedWordsCount: updatedCompleted.length,
             completedWordKeys: updatedCompleted,
-            skippedWordKeys: skippedWordKeys
+            skippedWordKeys: updatedSkippedGlobal
           });
         }
       } else {
@@ -1070,7 +1080,7 @@ export default function HomeWorkspace({
         const newCompleted = [...completedGroups];
         let newCompletedWordsCount = updatedCompleted.length;
         
-        let finalSkipped = [...skippedWordKeys];
+        let finalSkipped = [...updatedSkippedGlobal];
         // Now that the group is fully complete, register all skipped words of this session as uncompleted
         nextSessionSkipped.forEach(skKey => {
           if (!finalSkipped.includes(skKey) && !updatedCompleted.includes(skKey)) {

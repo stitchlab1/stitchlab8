@@ -693,16 +693,18 @@ export default function App() {
       });
     }
 
-    // 2. Groups-to-Words Retrospective Hydration (Hydrate completed word keys from completed groups)
+    // 2. Groups-to-Words Retrospective Hydration (Hydrate completed word keys from completed groups, excluding skipped/uncompleted words)
     const finalCompletedWordsSet = new Set<string>(completedWordKeys.map(k => k.toLowerCase().trim()));
+    const finalSkippedSet = new Set<string>(skippedWordKeys.map(k => k.toLowerCase().trim()));
     let completedWordKeysChanged = false;
 
     finalCompletedGroups.forEach(gKey => {
       const wordsSet = groupWordsMap.get(gKey);
       if (wordsSet) {
         wordsSet.forEach(w => {
-          if (!finalCompletedWordsSet.has(w)) {
-            finalCompletedWordsSet.add(w);
+          const lowerW = w.toLowerCase().trim();
+          if (!finalCompletedWordsSet.has(lowerW) && !finalSkippedSet.has(lowerW)) {
+            finalCompletedWordsSet.add(lowerW);
             completedWordKeysChanged = true;
           }
         });
