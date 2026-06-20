@@ -3648,6 +3648,7 @@ export default function App() {
                     points={points}
                     completedWordsCount={completedWordsCount}
                     studentSemester={studentSemester}
+                    completedWordKeys={completedWordKeys}
                   />
                 )}
 

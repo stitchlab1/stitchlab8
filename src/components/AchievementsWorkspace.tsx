@@ -11,6 +11,7 @@ import {
   Lock, 
   CheckCircle 
 } from "lucide-react";
+import { getFilteredCompletedAndSkipped } from "../utils/wordFilters";
 
 interface DailyQuote {
   quote: string;
@@ -34,6 +35,7 @@ interface AchievementsWorkspaceProps {
   points?: number;
   completedWordsCount?: number;
   studentSemester?: string;
+  completedWordKeys?: string[];
 }
 
 export default function AchievementsWorkspace({
@@ -51,7 +53,8 @@ export default function AchievementsWorkspace({
   analyzedCountProp,
   points = 0,
   completedWordsCount = 0,
-  studentSemester = "الفصل الدراسي الأول"
+  studentSemester = "الفصل الدراسي الأول",
+  completedWordKeys = []
 }: AchievementsWorkspaceProps) {
   
   // Load supporting states with prop priority, falling back manually to localStorage
@@ -83,11 +86,31 @@ export default function AchievementsWorkspace({
 
   // Compute calculated values
   const totalWordsLearned = React.useMemo(() => {
-    if (completedWordsCount !== undefined && completedWordsCount > 0) {
-      return completedWordsCount;
+    // 1. Get words from completedWordKeys prop or fallback to localStorage
+    const savedKeys = localStorage.getItem("stitchlab_completed_word_keys");
+    let localKeys: string[] = [];
+    if (savedKeys) {
+      try {
+        localKeys = JSON.parse(savedKeys);
+      } catch (e) {}
     }
-    return customCardsCount + (completedGroups.length * 4);
-  }, [completedWordsCount, customCardsCount, completedGroups.length]);
+    const activeKeys = (completedWordKeys && completedWordKeys.length > 0) ? completedWordKeys : localKeys;
+
+    // 2. Get skipped words to filter accurately
+    const savedSkipped = localStorage.getItem("stitchlab_skipped_word_keys");
+    let localSkipped: string[] = [];
+    if (savedSkipped) {
+      try {
+        localSkipped = JSON.parse(savedSkipped);
+      } catch (e) {}
+    }
+
+    // 3. Filter completed list strictly to only those belonging to completed groups
+    const { filteredCompleted } = getFilteredCompletedAndSkipped(activeKeys, localSkipped, completedGroups);
+
+    // This is the exact number of completed words (الكلمات المنجزة) that the student has processed and completed!
+    return filteredCompleted.length;
+  }, [completedWordKeys, completedGroups]);
   
   const streakDays = React.useMemo(() => {
     const savedVisitDates = localStorage.getItem("stitchlab_visit_dates");
