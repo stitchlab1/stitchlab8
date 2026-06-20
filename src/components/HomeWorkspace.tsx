@@ -51,6 +51,8 @@ interface HomeWorkspaceProps {
     completedWordsCount: number;
     unlockedLevel: number;
     completedLevels: number[];
+    completedWordKeys: string[];
+    skippedWordKeys: string[];
   }>) => void;
   points?: number;
   setPoints?: React.Dispatch<React.SetStateAction<number>>;
@@ -517,6 +519,13 @@ export default function HomeWorkspace({
   const [dismissedSpecialBubble, setDismissedSpecialBubble] = useState<boolean>(false);
   const [showCompletionWarning, setShowCompletionWarning] = useState<boolean>(false);
 
+  // Word state tracking for current group training session
+  const [sessionSkippedWords, setSessionSkippedWords] = useState<string[]>([]);
+
+  useEffect(() => {
+    setSessionSkippedWords([]);
+  }, [activeTrainingLevel, activeTrainingSemester, activeTrainingGroup]);
+
   // --- PROGRESSIVE WEB APP (PWA) AND OFFLINE / ADSTERRA ADVERTISING MANAGEMENT ---
   const [offlineError, setOfflineError] = useState<string | null>(null);
   const [isOnline, setIsOnline] = useState<boolean>(() => typeof navigator !== "undefined" ? navigator.onLine : true);
@@ -833,32 +842,17 @@ export default function HomeWorkspace({
 
   const uniqueGroupsInModal = useMemo(() => {
     if (!selectedLevel || !modalSemester) return [];
-    const filtered = sheetWords.filter(w => 
-      w.level === selectedLevel.number && 
-      w.semester === modalSemester
-    );
-    const groups = new Set<string>();
-    filtered.forEach(w => {
-      if (w.group && w.group.trim()) {
-        groups.add(w.group.trim());
-      }
-    });
-    const list = Array.from(groups);
     
-    // Sort sequence: Unlocked / open groups first
-    list.sort((a, b) => {
-      const keyA = `${selectedLevel.number}_${modalSemester}_${a}`;
-      const keyB = `${selectedLevel.number}_${modalSemester}_${b}`;
-      const unlA = isGroupSequenceUnlocked(keyA) ? 1 : 0;
-      const unlB = isGroupSequenceUnlocked(keyB) ? 1 : 0;
-      
-      if (unlA !== unlB) {
-        return unlB - unlA; // Unlocked (1) first
-      }
-      return a.localeCompare(b, "ar");
-    });
-    return list;
-  }, [sheetWords, selectedLevel, modalSemester, isGroupSequenceUnlocked]);
+    // Filter our global allSortedGroups that match this level and semester
+    // Since allSortedGroups is already sorted chronologically by addition, filtering it keeps that exact chronological order!
+    const filtered = allSortedGroups.filter(g => 
+      g.level === selectedLevel.number && 
+      g.semester === modalSemester
+    );
+    
+    // Extract the group names in their exact chronological order!
+    return filtered.map(g => g.group);
+  }, [allSortedGroups, selectedLevel, modalSemester]);
 
   useEffect(() => {
     setModalGroup("");
@@ -1025,16 +1019,14 @@ export default function HomeWorkspace({
     };
 
     const handleSkipWord = () => {
-      // Mark as skipped!
+      // Mark as skipped in session skipped list!
       const wKey = currentWord.word.toLowerCase().trim();
-      let updatedSkipped = [...skippedWordKeys];
-      if (!updatedSkipped.includes(wKey)) {
-        updatedSkipped.push(wKey);
-        if (setSkippedWordKeys) {
-          setSkippedWordKeys(updatedSkipped);
-        }
-        localStorage.setItem("stitchlab_skipped_word_keys", JSON.stringify(updatedSkipped));
-      }
+      
+      const nextSessionSkipped = sessionSkippedWords.includes(wKey)
+        ? sessionSkippedWords
+        : [...sessionSkippedWords, wKey];
+      setSessionSkippedWords(nextSessionSkipped);
+
       // Remove from completed
       let updatedCompleted = [...completedWordKeys];
       if (updatedCompleted.includes(wKey)) {
@@ -1066,7 +1058,11 @@ export default function HomeWorkspace({
       if (currentWordIndex < trainingWords.length - 1) {
         setCurrentWordIndex(prev => prev + 1);
         if (onForceSaveProgress) {
-          onForceSaveProgress({ completedWordsCount: updatedCompleted.length });
+          onForceSaveProgress({ 
+            completedWordsCount: updatedCompleted.length,
+            completedWordKeys: updatedCompleted,
+            skippedWordKeys: skippedWordKeys
+          });
         }
       } else {
         // Complete the group
@@ -1074,6 +1070,19 @@ export default function HomeWorkspace({
         const newCompleted = [...completedGroups];
         let newCompletedWordsCount = updatedCompleted.length;
         
+        let finalSkipped = [...skippedWordKeys];
+        // Now that the group is fully complete, register all skipped words of this session as uncompleted
+        nextSessionSkipped.forEach(skKey => {
+          if (!finalSkipped.includes(skKey) && !updatedCompleted.includes(skKey)) {
+            finalSkipped.push(skKey);
+          }
+        });
+
+        if (setSkippedWordKeys) {
+          setSkippedWordKeys(finalSkipped);
+        }
+        localStorage.setItem("stitchlab_skipped_word_keys", JSON.stringify(finalSkipped));
+
         if (!newCompleted.includes(groupKey)) {
           newCompleted.push(groupKey);
           setCompletedGroups(newCompleted);
@@ -1103,7 +1112,9 @@ export default function HomeWorkspace({
           if (onForceSaveProgress) {
             onForceSaveProgress({
               completedGroups: newCompleted,
-              completedWordsCount: newCompletedWordsCount
+              completedWordsCount: newCompletedWordsCount,
+              completedWordKeys: updatedCompleted,
+              skippedWordKeys: finalSkipped
             });
           }
         } else {
@@ -1124,7 +1135,9 @@ export default function HomeWorkspace({
               completedGroups: newCompleted,
               completedWordsCount: newCompletedWordsCount,
               completedLevels: nextCompletedLevels,
-              unlockedLevel: nextUnlockedLevel
+              unlockedLevel: nextUnlockedLevel,
+              completedWordKeys: updatedCompleted,
+              skippedWordKeys: finalSkipped
             });
           }
 
@@ -1193,7 +1206,11 @@ export default function HomeWorkspace({
       if (currentWordIndex < trainingWords.length - 1) {
         setCurrentWordIndex(prev => prev + 1);
         if (onForceSaveProgress) {
-          onForceSaveProgress({ completedWordsCount: updatedCompleted.length });
+          onForceSaveProgress({ 
+            completedWordsCount: updatedCompleted.length,
+            completedWordKeys: updatedCompleted,
+            skippedWordKeys: updatedSkipped
+          });
         }
       } else {
         // Save completed group key in completed groups!
@@ -1201,6 +1218,19 @@ export default function HomeWorkspace({
         const newCompleted = [...completedGroups];
         let newCompletedWordsCount = updatedCompleted.length;
         
+        let finalSkipped = [...updatedSkipped];
+        // Now that the group is fully complete, register all skipped words of this session as uncompleted
+        sessionSkippedWords.forEach(skKey => {
+          if (!finalSkipped.includes(skKey) && !updatedCompleted.includes(skKey)) {
+            finalSkipped.push(skKey);
+          }
+        });
+
+        if (setSkippedWordKeys) {
+          setSkippedWordKeys(finalSkipped);
+        }
+        localStorage.setItem("stitchlab_skipped_word_keys", JSON.stringify(finalSkipped));
+
         if (!newCompleted.includes(groupKey)) {
           newCompleted.push(groupKey);
           setCompletedGroups(newCompleted);
@@ -1232,7 +1262,9 @@ export default function HomeWorkspace({
           if (onForceSaveProgress) {
             onForceSaveProgress({
               completedGroups: newCompleted,
-              completedWordsCount: newCompletedWordsCount
+              completedWordsCount: newCompletedWordsCount,
+              completedWordKeys: updatedCompleted,
+              skippedWordKeys: finalSkipped
             });
           }
         } else {
@@ -1253,7 +1285,9 @@ export default function HomeWorkspace({
               completedGroups: newCompleted,
               completedWordsCount: newCompletedWordsCount,
               completedLevels: nextCompletedLevels,
-              unlockedLevel: nextUnlockedLevel
+              unlockedLevel: nextUnlockedLevel,
+              completedWordKeys: updatedCompleted,
+              skippedWordKeys: finalSkipped
             });
           }
 

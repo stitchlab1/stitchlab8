@@ -2104,6 +2104,8 @@ export default function App() {
     completedWordsCount: number;
     unlockedLevel: number;
     completedLevels: number[];
+    completedWordKeys: string[];
+    skippedWordKeys: string[];
   }>) => {
     console.log("[StitchLab] Forcing immediate, synchronous save to localStorage...");
     try {
@@ -2111,6 +2113,8 @@ export default function App() {
       const finalCompletedWordsCount = overrides?.completedWordsCount ?? completedWordsCount;
       const finalUnlockedLevel = overrides?.unlockedLevel ?? unlockedLevel;
       const finalCompletedLevels = overrides?.completedLevels ?? completedLevels;
+      const finalCompletedWordKeys = overrides?.completedWordKeys ?? completedWordKeys;
+      const finalSkippedWordKeys = overrides?.skippedWordKeys ?? skippedWordKeys;
 
       localStorage.setItem("stitchlab_completed_groups", JSON.stringify(finalCompletedGroups));
       localStorage.setItem("stitchlab_completed_words_count", finalCompletedWordsCount.toString());
@@ -2125,8 +2129,8 @@ export default function App() {
       localStorage.setItem("stitchlab_quiz_attempts", quizAttempts.toString());
       localStorage.setItem("stitchlab_analyzed_count", analyzedCount.toString());
       localStorage.setItem("stitchlab_student_semester", studentSemester);
-      localStorage.setItem("stitchlab_completed_word_keys", JSON.stringify(completedWordKeys));
-      localStorage.setItem("stitchlab_skipped_word_keys", JSON.stringify(skippedWordKeys));
+      localStorage.setItem("stitchlab_completed_word_keys", JSON.stringify(finalCompletedWordKeys));
+      localStorage.setItem("stitchlab_skipped_word_keys", JSON.stringify(finalSkippedWordKeys));
 
       if (isLoggedIn && auth.currentUser) {
         const uid = auth.currentUser.uid;
@@ -2134,7 +2138,7 @@ export default function App() {
         const progressPayload = {
           uid,
           name: currentUser?.name || auth.currentUser.displayName || "طالب مميز",
-    lastNameChangedAt: currentUser?.lastNameChangedAt || "",
+          lastNameChangedAt: currentUser?.lastNameChangedAt || "",
           email: auth.currentUser.email || "",
           level: userLevel,
           points: points,
@@ -2142,8 +2146,8 @@ export default function App() {
           completedLevels: finalCompletedLevels,
           completedGroups: finalCompletedGroups,
           unlockedAdvertiserGroups: unlockedAdvertiserGroups,
-          completedWordKeys: completedWordKeys,
-          skippedWordKeys: skippedWordKeys,
+          completedWordKeys: finalCompletedWordKeys,
+          skippedWordKeys: finalSkippedWordKeys,
           customFlashcards: customFlashcards,
           conversationsHad: conversationsHad,
           quizScore: quizScore,
