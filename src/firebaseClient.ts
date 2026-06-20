@@ -4,8 +4,6 @@ import {
   getAuth, 
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signOut,
   onAuthStateChanged,
   type User as FirebaseUser
@@ -44,7 +42,7 @@ isSupported().then((supported) => {
   console.warn("Firebase Analytics not supported in this environment:", e);
 });
 
-export { app, analytics, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged };
+export { app, analytics, signInWithPopup, signOut, onAuthStateChanged };
 export type { FirebaseUser };
 
 export enum OperationType {

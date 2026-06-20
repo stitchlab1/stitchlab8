@@ -38,8 +38,6 @@ import {
   db, 
   googleProvider, 
   signInWithPopup, 
-  signInWithRedirect,
-  getRedirectResult,
   signOut,
   onAuthStateChanged,
   handleFirestoreError,
@@ -896,40 +894,6 @@ export default function App() {
       localStorage.setItem("stitchlab_custom_cards", JSON.stringify(customFlashcards));
     }
   }, [customFlashcards]);
-
-  // Firebase redirect sign-in results handler
-  useEffect(() => {
-    getRedirectResult(auth)
-      .then((result) => {
-        if (result) {
-          console.log("StitchLab Auth: Google Redirect Sign-In successful:", result.user);
-        }
-      })
-      .catch((err: any) => {
-        console.error("Google Redirect Sign-In error:", err);
-        const errStr = err.message || "";
-        const isUnauthorizedDomain = err.code === "auth/unauthorized-domain" || errStr.includes("auth/unauthorized-domain") || errStr.includes("unauthorized-domain");
-        if (isUnauthorizedDomain) {
-          const currentHost = window.location.hostname;
-          setAuthError(
-            `⚠️ خطأ: النطاق الحالي (${currentHost}) غير مصرح به في إعدادات Firebase لخدمة تسجيل الدخول بـ Google.\n\n` +
-            `لحل هذه المشكلة في ثوانٍ وتفعيل الدخول السريع:\n` +
-            `1️⃣ اذهب إلى كونسول Firebase (console.firebase.google.com) لمشروعك "stitchlab-42087".\n` +
-            `2️⃣ انتقل إلى زر Authentication 👥 ثم اختر التبويب Settings ⚙️ بالكلية.\n` +
-            `3️⃣ من خيار Authorized domains (النطاقات المصرح بها) اضغط على زر "Add domain".\n` +
-            `4️⃣ أضف النطاقات التالية:\n` +
-            `   • ${currentHost}\n` +
-            `   • stitchlab2.vercel.app\n` +
-            `   • vercel.app\n` +
-            `   • ais-pre-s3w4brjysehjqipqfcuhgi-220375696903.europe-west2.run.app\n` +
-            `   • localhost\n\n` +
-            `🔄 بعد الإضافة، قم بإعادة تنشيط الصفحة وحاول تسجيل الدخول مرة أخرى بحساب Google الخاص بك لتفادي العائق!`
-          );
-        } else {
-          setAuthError(err.message || "فشل تسجيل الدخول عبر Google Redirect. يرجى المحاولة مرة أخرى.");
-        }
-      });
-  }, []);
 
   // Firebase auth state listener & automatic cloud data sync bootstrap
   useEffect(() => {
@@ -1929,7 +1893,7 @@ export default function App() {
     }
   };
 
-  // Auth: handle Google Sign-In via Firebase Redirect
+  // Auth: handle Google Sign-In via Firebase Popup
   const handleGoogleSignIn = async () => {
     if (!agreedToTerms) {
       setAuthError("يرجى الموافقة على شروط الاستخدام وسياسة الخصوصية للمتابعة وإكمال عملية التسجيل.");
@@ -1939,8 +1903,8 @@ export default function App() {
     setAuthLoading(true);
     try {
       const { GoogleAuthProvider } = await import("firebase/auth");
-      await signInWithRedirect(auth, googleProvider);
-      console.log("StitchLab Auth: Google Redirect Sign-In initiated.");
+      await signInWithPopup(auth, googleProvider);
+      console.log("StitchLab Auth: Google Sign-In successful with basic credentials.");
     } catch (err: any) {
       console.error("Google Sign-In failed:", err);
       const errStr = err.message || "";
@@ -1967,6 +1931,7 @@ export default function App() {
       } else {
         setAuthError(err.message || "فشل تسجيل الدخول عبر Google. يرجى المحاولة مرة أخرى.");
       }
+    } finally {
       setAuthLoading(false);
     }
   };
