@@ -3,10 +3,10 @@
   "short_name": "StitchLab",
   "description": "منصة تفاعلية ذكية لتعلم وإتقان اللغة الإنجليزية بدعم من الذكاء الاصطناعي ومحادثات ومحلل قواعد متكامل للمتحدثين بالعربية",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "portrait",
-  "background_color": "#1F112D",
-  "theme_color": "#CDFF00",
+  "background_color": "#FDF2F9",
+  "theme_color": "#9B59B6",
   "id": "/stitchlab/",
   "categories": [ "education", "language" ],
   "icons": [
