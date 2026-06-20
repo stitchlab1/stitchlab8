@@ -53,11 +53,13 @@ export function getFilteredCompletedAndSkipped(
   const filteredCompleted: string[] = [];
   const filteredSkipped: string[] = [];
 
+  // 1. Process words based on completed groups
   allWordsList.forEach((item) => {
     if (item && item.word && item.group && item.semester && item.level) {
       const groupKey = `${item.level}_${item.semester.trim()}_${item.group.trim()}`;
+      const wVal = item.word.toLowerCase().trim();
+      
       if (completedGroupsSet.has(groupKey)) {
-        const wVal = item.word.toLowerCase().trim();
         if (completedSet.has(wVal)) {
           if (!filteredCompleted.includes(wVal)) {
             filteredCompleted.push(wVal);
@@ -68,6 +70,14 @@ export function getFilteredCompletedAndSkipped(
           }
         }
       }
+    }
+  });
+
+  // 2. Also ensure ANY word that has been explicitly skipped by the student
+  // is instantly counted as "Skipped" (uncompleted) even if its group is not yet completed!
+  skippedSet.forEach((wVal) => {
+    if (wVal && !completedSet.has(wVal) && !filteredSkipped.includes(wVal)) {
+      filteredSkipped.push(wVal);
     }
   });
 

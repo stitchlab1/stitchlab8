@@ -806,6 +806,21 @@ export default function HomeWorkspace({
     return DEFAULT_SHEET_WORDS.filter(w => w.level === activeTrainingLevel.number);
   }, [activeTrainingLevel, sheetWords, activeTrainingSemester, activeTrainingGroup]);
 
+  useEffect(() => {
+    // When active group/semester/level changes, initialize sessionSkippedWords 
+    // with any words of this training group that are already in skippedWordKeys!
+    if (activeTrainingLevel && activeTrainingSemester && activeTrainingGroup && trainingWords.length > 0) {
+      const activeGroupWords = trainingWords.map(w => w.word.toLowerCase().trim());
+      const existingSkipped = (skippedWordKeys || []).filter(skKey => {
+        const lowerSk = skKey.toLowerCase().trim();
+        return activeGroupWords.includes(lowerSk);
+      });
+      setSessionSkippedWords(existingSkipped.map(k => k.toLowerCase().trim()));
+    } else {
+      setSessionSkippedWords([]);
+    }
+  }, [activeTrainingLevel, activeTrainingSemester, activeTrainingGroup, trainingWords, skippedWordKeys]);
+
   const filteredUniqueGroups = useMemo(() => {
     if (!groupSearchQuery.trim()) return [];
     const query = groupSearchQuery.toLowerCase().trim();
@@ -1380,15 +1395,15 @@ export default function HomeWorkspace({
 
         recognition.onresult = (event: any) => {
           const transcript = event.results[0][0].transcript;
-          setSpeechText(transcript);
+          setSpeechText(currentWord.word);
           
           if (isSpeechMatched(currentWord.word, transcript)) {
             setSpeechScore(true);
-            setSpeechStatus(`Great job! 🎉 مستواك رائع ومطابق! سمعنا: "${transcript}" ✓`);
+            setSpeechStatus(`Great job! 🎉 مستواك رائع ومطابق! سمعنا: "${currentWord.word}" ✓`);
             playAudioFeedback(true);
           } else {
             setSpeechScore(false);
-            setSpeechStatus(`Try again! ⚠️ لم يتطابق تماماً. لقد سمعنا: "${transcript}". حاول مرة أخرى!`);
+            setSpeechStatus(`Try again! ⚠️ لم يتطابق تماماً. لقد سمعنا: "${currentWord.word}". حاول مرة أخرى!`);
             playAudioFeedback(false);
             setIncorrectSpeechAttempts(prev => {
               const nextVal = prev + 1;
@@ -1458,6 +1473,13 @@ export default function HomeWorkspace({
               className="h-full bg-gradient-to-r from-purple-500 via-pink-400 to-pink-500 rounded-full transition-all duration-500 ease-out"
               style={{ width: `${((currentWordIndex + 1) / trainingWords.length) * 100}%` }}
             />
+          </div>
+          {/* Uncompleted/Skipped words indicator inside the progress container */}
+          <div className="flex justify-between items-center mt-2.5 pt-2 border-t border-slate-100 text-[10.5px] font-extrabold text-slate-500">
+            <span className="flex items-center gap-1.5">
+              <span>⏩ الكلمات التي لم تنجزها (تخطي):</span>
+            </span>
+            <span className="text-rose-600 font-black font-sans">{sessionSkippedWords.length} كلمة</span>
           </div>
         </div>
 
@@ -1742,7 +1764,7 @@ export default function HomeWorkspace({
                 }`}
                 title={incorrectSpeechAttempts >= 5 ? "تخطي هذه الكلمة والخصم من النقاط" : "يتفعل بعد 5 محاولات نطق خاطئة"}
               >
-                <span>تخطي ⏩</span>
+                <span>تخطي ⏩ ({sessionSkippedWords.length})</span>
               </button>
               <span className={`text-[9px] font-black ${incorrectSpeechAttempts >= 5 ? "text-rose-600 animate-pulse font-extrabold" : "text-slate-400 font-bold"}`}>
                 {incorrectSpeechAttempts} / 5 خطأ
