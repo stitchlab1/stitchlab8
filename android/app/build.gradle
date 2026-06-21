@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 
 android {
     namespace = "com.stitchlab.app"
     compileSdk = rootProject.ext.compileSdkVersion
-    
     defaultConfig {
         applicationId "com.stitchlab.app"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -18,25 +16,10 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
-
-    // Optional: Professional Signing configuration for Google Play and Uptodown store releases
-    signingConfigs {
-        release {
-            // Placeholder: When building the final production APK, you can define your keystore properties here, 
-            // or pass them in via system environment variables / local.properties for security:
-            // storeFile file("release-key.jks")
-            // storePassword System.getenv("SIGNING_STORE_PASSWORD")
-            // keyAlias System.getenv("SIGNING_KEY_ALIAS")
-            // keyPassword System.getenv("SIGNING_KEY_PASSWORD")
-        }
-    }
-
     buildTypes {
         release {
-            minifyEnabled false // Set to true with proguard configuration to shrink and obfuscate final APK size
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // To apply the signing config above, uncomment the line below after configuring storeFile:
-            // signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
