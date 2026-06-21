@@ -13,6 +13,7 @@ jobs:
           cache: 'npm'
       - name: Build Web
         run: |
+          rm -rf node_modules package-lock.json
           npm install
           npm run build
       - name: Setup Java
