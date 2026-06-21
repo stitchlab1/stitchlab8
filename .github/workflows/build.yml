@@ -15,7 +15,7 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
           npm install
-          npm run build
+          npm run android:build
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
