@@ -31,10 +31,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build Android APK
+      - name: Fix and Build
         run: |
           cd android
-          chmod -R 777 .
+          # تنظيف الملفات التالفة
+          rm -rf gradle/wrapper/gradle-wrapper.jar
+          # إعادة إنشاء الـ wrapper لضمان نسخة سليمة
+          ./gradlew wrapper --gradle-version 8.2
+          # منح صلاحيات التنفيذ
+          chmod +x gradlew
+          # تنفيذ البناء
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
