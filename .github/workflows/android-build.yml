@@ -1,63 +1,46 @@
-name: Build Android APK (Capacitor)
+name: Build Android APK
 
 on:
   push:
-    branches:
-      - main
-      - master
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+    branches: [ main ]
 
 jobs:
   build:
-    name: Build Android APK
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-size: 'large'
-          node-version: 18
-          cache: 'npm'
+          node-version: '22'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
 
-      - name: Build Web Application
+      - name: Build Web Assets
         run: npm run build
 
-      - name: Sync Web Code to Android via Capacitor
-        run: npx cap sync
+      - name: Sync Capacitor
+        run: npx cap sync android
 
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
-      - name: Make Gradle Wrapper Executable
+      - name: Grant execute permission for gradlew
         run: chmod +x android/gradlew
 
-      - name: Build APK with Gradle
+      - name: Build Android APK
         run: |
           cd android
           ./gradlew assembleDebug
-          ./gradlew assembleRelease --no-daemon
 
-      - name: Upload Debug APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: stitchlab-debug-apk
+          name: app-debug
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 7
-
-      - name: Upload Release Unsigned APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: stitchlab-release-unsigned-apk
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
-          retention-days: 7
