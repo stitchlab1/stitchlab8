@@ -31,16 +31,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Clean and Build
+      - name: Fix and Build
         run: |
           cd android
-          # حذف أي ملفات قد تكون تالفة
+          # حذف أي ملفات Jar قد تكون تالفة
           rm -f gradle/wrapper/gradle-wrapper.jar
-          # إعادة توليد الـ wrapper لضمان سلامته
+          # إعادة توليد بيئة Gradle من خوادم رسمية
           ./gradlew wrapper --gradle-version 8.2
-          # منح صلاحية التنفيذ
+          # منح صلاحية التنفيذ للملف الجديد
           chmod +x gradlew
-          # تنفيذ البناء
+          # تنفيذ عملية البناء
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
