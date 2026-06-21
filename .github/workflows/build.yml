@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          check-latest: true
 
       - name: Install dependencies
         run: npm install
@@ -29,13 +30,28 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          java-package: jdk
+
+      - name: Accept Android Licenses
+        run: |
+          mkdir -p "$ANDROID_HOME/licenses"
+          echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
+          echo -e "\n504667f4c0e7b10469032729a674116035f1118a" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
       - name: Build and Permissions
         run: |
           cd android
-          # إعطاء صلاحية التنفيذ
+          # تنظيف بيئة Gradle من أي ملفات تالفة أو غير متوافقة
+          rm -rf .gradle
+          rm -rf gradle/wrapper/gradle-wrapper.jar
+          
+          # إعادة إنشاء Wrapper نظيف من خوادم Gradle
+          gradle wrapper --gradle-version 8.2
+          
+          # منح أذونات التنفيذ للملفات
           chmod +x gradlew
-          # تنظيف وبناء
+          
+          # تنفيذ عملية البناء
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
