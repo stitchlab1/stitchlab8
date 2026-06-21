@@ -30,12 +30,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Fix and Setup Gradle
+      - name: Build Android APK
         run: |
           cd android
-          rm -f gradle/wrapper/gradle-wrapper.jar
-          ./gradlew wrapper --gradle-version 8.2
-          chmod +x gradlew
+          # منح صلاحيات كاملة لجميع ملفات الأندرويد لتجاوز قيود محرر المتصفح
+          chmod -R 777 .
+          # تشغيل البناء
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
