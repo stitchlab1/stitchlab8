@@ -31,17 +31,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Fix and Build
+      - name: Fix Permissions and Build
         run: |
           cd android
-          # تنظيف الملفات التالفة
-          rm -rf gradle/wrapper/gradle-wrapper.jar
-          # إعادة إنشاء الـ wrapper لضمان نسخة سليمة
-          ./gradlew wrapper --gradle-version 8.2
-          # منح صلاحيات التنفيذ
-          chmod +x gradlew
-          # تنفيذ البناء
-          ./gradlew assembleDebug --no-daemon
+          # تعيين الصلاحيات لجميع الملفات في مجلد الأندرويد لضمان عدم وجود عوائق
+          chmod -R +x .
+          # تشغيل البناء باستخدام bash بشكل مباشر
+          /bin/bash ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
