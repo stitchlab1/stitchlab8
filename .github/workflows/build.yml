@@ -14,7 +14,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          check-latest: true
 
       - name: Install dependencies
         run: npm install
@@ -31,16 +30,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Fix and Build
+      - name: Build and Permissions
         run: |
           cd android
-          # حذف أي ملفات Jar قد تكون تالفة
-          rm -f gradle/wrapper/gradle-wrapper.jar
-          # إعادة توليد بيئة Gradle من خوادم رسمية
-          ./gradlew wrapper --gradle-version 8.2
-          # منح صلاحية التنفيذ للملف الجديد
+          # إعطاء صلاحية التنفيذ
           chmod +x gradlew
-          # تنفيذ عملية البناء
+          # تنظيف وبناء
           ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
