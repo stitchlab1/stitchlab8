@@ -1363,11 +1363,13 @@ export default function HomeWorkspace({
       }
     };
 
-    const handleMicrophoneClick = () => {
+    const handleMicrophoneClick = async () => {
       if (isListening) {
         setIsListening(false);
         return;
       }
+
+      setSpeechStatus("جاري طلب إذن استخدام الميكروفون... 🎙️");
 
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (!SpeechRecognition) {
@@ -1378,6 +1380,19 @@ export default function HomeWorkspace({
           setSpeechStatus("Great job! 🎉 مستواك ممتاز! النطق صحيح ومطابق (محاكاة) ✓");
           playAudioFeedback(true);
         }, 1200);
+        return;
+      }
+
+      // Explicitly request microphone permissions using the browser's MediaDevices API to prompt the user
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // Stop all audio tracks immediately to release the microphone for the web speech recognition API
+          stream.getTracks().forEach(track => track.stop());
+        }
+      } catch (err) {
+        console.error("Microphone permission denied or error:", err);
+        setSpeechStatus("تم رفض إذن الميكروفون أو لم يتم تفعيله. يرجى تفعيل إذن الميكروفون من إعدادات المتصفح للمتابعة.");
         return;
       }
 
