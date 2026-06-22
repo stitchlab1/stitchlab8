@@ -1830,7 +1830,7 @@ export default function HomeWorkspace({
           {/* Search Results */}
           {groupSearchQuery.trim() !== "" && (
             <div className="space-y-2 mt-2 animate-fadeIn">
-              <div className="flex justify-between items-center text-[10px] text-slate-400 font-black px-1">
+              <div className="flex justify-between items-center text-[10px] text-slate-450 font-black px-1">
                 <span>المجموعات المكتشفة ({groupMatchingWordsResults.length})</span>
                 {groupMatchingWordsResults.length === 0 && <span>لم نجد أي مـجموعة مطابقة</span>}
               </div>
@@ -1839,6 +1839,13 @@ export default function HomeWorkspace({
                 {groupMatchingWordsResults.map((item) => {
                   const isUnlocked = isGroupSequenceUnlocked(item.key);
                   const isCompleted = completedGroups.includes(item.key);
+
+                  const levelGroups = allSortedGroups.filter(g => g.level === item.level && g.semester === item.semester);
+                  const itemIndex = levelGroups.findIndex(g => g.group === item.group);
+                  const isActiveFrontier = isUnlocked && !isCompleted && 
+                    levelGroups.findIndex(g => {
+                      return isGroupSequenceUnlocked(g.key) && !completedGroups.includes(g.key);
+                    }) === itemIndex;
 
                   const isShaking = shakingGroupKey === item.key;
 
@@ -1877,7 +1884,7 @@ export default function HomeWorkspace({
                         
                         <div className="flex flex-col text-right pr-2">
                           <span className="text-xs font-black text-slate-800">{item.group}</span>
-                          <span className="text-[9px] text-purple-600 font-bold">المستوى {item.level} • {item.semester}</span>
+                          <span className="text-[9px] text-purple-650 font-bold">المستوى {item.level} • {item.semester}</span>
                         </div>
                       </div>
 
@@ -1885,10 +1892,12 @@ export default function HomeWorkspace({
                       <div className="flex items-center gap-1 text-slate-500 text-[10px] font-bold shrink-0">
                         {isCompleted ? (
                           <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-250">مكتمل ✓</span>
+                        ) : isActiveFrontier ? (
+                          <span className="bg-pink-100 text-pink-750 px-2 py-0.5 rounded-full border border-pink-200 font-black">قفل مفتوح 🔓</span>
                         ) : isUnlocked ? (
-                          <span className="bg-purple-155 text-purple-800 px-2 py-0.5 rounded-full border border-purple-220">غير مكتمل</span>
+                          <span className="bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full border border-purple-220">مفتوح 🔓</span>
                         ) : (
-                          <span className="bg-slate-100 text-slate-400 px-2 py-0.5 rounded-full border border-slate-200">مغلق</span>
+                          <span className="bg-slate-100 text-slate-400 px-2 py-0.5 rounded-full border border-slate-200">مغلق 🔒</span>
                         )}
                       </div>
                     </div>
@@ -2466,7 +2475,7 @@ export default function HomeWorkspace({
                               {isCompleted ? (
                                 <span className="text-[9px] bg-emerald-100 text-emerald-800 font-black px-2 py-0.5 rounded-full border border-emerald-200">جاهز ✓</span>
                               ) : isActiveFrontier ? (
-                                <span className="text-[9px] bg-pink-200 text-pink-800 font-black px-2 py-0.5 rounded-full border border-pink-300">الجديدة 🔓</span>
+                                <span className="text-[9px] bg-pink-200 text-pink-800 font-black px-2 py-0.5 rounded-full border border-pink-300">قفل مفتوح 🔓</span>
                               ) : isUnlocked ? (
                                 <span className="text-[9px] bg-purple-200 text-purple-800 font-black px-2 py-0.5 rounded-full border border-purple-300">مفتوحة 🔓</span>
                               ) : (

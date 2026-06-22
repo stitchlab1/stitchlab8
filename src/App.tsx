@@ -79,6 +79,9 @@ export default function App() {
   // Splash Screen State
   const [showSplash, setShowSplash] = useState<boolean>(true);
 
+  // Google ChatGPT-Style Opening Portal State
+  const [googleOpeningActive, setGoogleOpeningActive] = useState<boolean>(false);
+
   // Detect if the user is running inside the mobile app/webview wrapper
   const [isAppMode] = useState<boolean>(() => {
     if (typeof window === "undefined") return false;
@@ -1903,7 +1906,10 @@ export default function App() {
     }
     setAuthError("");
     setAuthLoading(true);
+    setGoogleOpeningActive(true);
     try {
+      // Small buffer delay of 800ms so they see the gorgeous futuristic ChatGPT portal swirl and open first
+      await new Promise(resolve => setTimeout(resolve, 800));
       const { GoogleAuthProvider } = await import("firebase/auth");
       await signInWithPopup(auth, googleProvider);
       console.log("StitchLab Auth: Google Sign-In successful with basic credentials.");
@@ -1935,6 +1941,7 @@ export default function App() {
       }
     } finally {
       setAuthLoading(false);
+      setGoogleOpeningActive(false);
     }
   };
 
@@ -4529,6 +4536,152 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* 🔮 Cosmic portal loading gate inspired by premium ChatGPT interfaces */}
+      <AnimatePresence>
+        {googleOpeningActive && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="fixed inset-0 z-[999] bg-[#09061a] flex flex-col items-center justify-center p-6 text-white select-none overflow-hidden"
+            dir="rtl"
+          >
+            {/* Ambient Nebula Flows */}
+            <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-purple-650/10 rounded-full blur-[130px] animate-pulse pointer-events-none"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-pink-650/10 rounded-full blur-[130px] animate-pulse pointer-events-none"></div>
+            
+            {/* Floating digital particles block */}
+            <div className="absolute inset-0 bg-[radial-gradient(#ffffff04_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+
+            {/* Main Portal Chamber with high-fidelity scale & circular rotate */}
+            <motion.div
+              initial={{ scale: 0.3, rotate: -45, y: 100, opacity: 0 }}
+              animate={{ 
+                scale: 1, 
+                rotate: 0, 
+                y: 0, 
+                opacity: 1,
+                transition: { 
+                  duration: 0.9, 
+                  type: "spring",
+                  stiffness: 70,
+                  damping: 15
+                }
+              }}
+              exit={{ 
+                scale: 1.3, 
+                rotate: 45, 
+                opacity: 0,
+                transition: { duration: 0.5, ease: "easeIn" }
+              }}
+              className="max-w-md w-full relative bg-white/5 border border-white/15 backdrop-blur-2xl rounded-[40px] p-8 text-center space-y-8 shadow-[0_0_80px_rgba(168,85,247,0.15)] flex flex-col items-center justify-center overflow-hidden"
+            >
+              {/* Spinning gradient boundary laser line */}
+              <div className="absolute inset-0 rounded-[40px] border-2 border-transparent bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-purple-500/20 opacity-40 animate-pulse pointer-events-none"></div>
+
+              {/* Glowing Portal Orb */}
+              <div className="relative w-28 h-28 flex items-center justify-center">
+                
+                {/* Layer 1: Nebula Ring rotation */}
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
+                  className="absolute inset-0 rounded-full border border-dashed border-purple-500/30"
+                ></motion.div>
+                
+                {/* Layer 2: Core Outer ring pulsing glowing pink to gold */}
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.15, 1],
+                    opacity: [0.6, 0.9, 0.6]
+                  }}
+                  transition={{ 
+                    repeat: Infinity, 
+                    duration: 2.5, 
+                    ease: "easeInOut" 
+                  }}
+                  className="absolute -inset-2 rounded-full bg-gradient-to-r from-purple-500 via-pink-500 to-amber-500 blur-md opacity-30"
+                ></motion.div>
+
+                {/* Layer 3: Pure Glass Glassmorphic Orb inside */}
+                <div className="absolute inset-2 bg-[#120f2e] border-2 border-white/20 rounded-full shadow-inner flex items-center justify-center">
+                  <motion.div
+                    animate={{ rotate: [0, -360] }}
+                    transition={{ repeat: Infinity, duration: 15, ease: "linear" }}
+                    className="absolute inset-0 p-1.5 opacity-50"
+                  >
+                    <div className="w-full h-full rounded-full border-t border-r border-amber-400"></div>
+                  </motion.div>
+                  {/* Google G Icon */}
+                  <img 
+                    src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/google_g_logo.png" 
+                    alt="Google" 
+                    className="w-10 h-10 hover:scale-110 transition-transform duration-300 drop-shadow-[0_2px_10px_rgba(255,255,255,0.4)] z-10" 
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                
+                {/* Micro floating stars of wisdom */}
+                <span className="absolute -top-1 -right-1 text-xs animate-bounce delay-100">✨</span>
+                <span className="absolute bottom-2 -left-2 text-xs animate-bounce delay-500">🌟</span>
+              </div>
+
+              {/* Explaining Text */}
+              <div className="space-y-3 relative z-10">
+                <motion.span 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0, transition: { delay: 0.3 } }}
+                  className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black tracking-widest text-[#ebb2ff] uppercase text-center font-sans"
+                >
+                  بوابة StitchLab الذكية الآمنة 🔒
+                </motion.span>
+                <motion.h2 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0, transition: { delay: 0.4 } }}
+                  className="text-xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-purple-200"
+                >
+                  جاري الاتصال بـ Google Sign-In...
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0, transition: { delay: 0.5 } }}
+                  className="text-xs text-[#a299cd] font-bold max-w-xs mx-auto leading-relaxed"
+                >
+                  نفتح لك الآن مساحة مهارات StitchLab الذكية، ومزامنة دفتر تقدّم الكلمات السحابي بنقرة آمنة ☁️.
+                </motion.p>
+              </div>
+
+              {/* Stylish progress bar indicator representing premium AI flow */}
+              <div className="w-full max-w-[240px] space-y-2 relative z-10">
+                <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden relative">
+                  <motion.div 
+                    initial={{ left: "-100%" }}
+                    animate={{ left: "100%" }}
+                    transition={{ 
+                      repeat: Infinity, 
+                      duration: 1.8, 
+                      ease: "easeInOut" 
+                    }}
+                    className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-purple-500 via-pink-500 to-amber-500 rounded-full"
+                  />
+                </div>
+                <div className="flex justify-between items-center text-[9px] text-[#78719c] font-black px-0.5 font-mono">
+                  <span>SECURE SSL GATEWAY</span>
+                  <span className="animate-pulse">WAITING...</span>
+                </div>
+              </div>
+
+              {/* Footer Credentials Info */}
+              <div className="pt-2 text-[9px] text-slate-500 font-medium max-w-[280px] leading-relaxed">
+                * بوابة تشفير آمنة ومباشرة مع خوادم Google للتسجيل الفوري دون اطلاع StitchLab على كلمة مرورك مطلقاً.
+              </div>
+
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
