@@ -4208,7 +4208,7 @@ export default function App() {
                     {showSkippedWordsList && (
                       <div className="p-4 pt-0 border-t border-rose-100/40 space-y-3 animate-fadeIn">
                         <div className="bg-rose-50/60 p-2.5 rounded-xl border border-rose-100/50 text-[10.5px] font-bold text-rose-950 leading-relaxed mt-2">
-                          الكلمات التي تخطيتها أو صعبت عليك في نطقك لها وتريد مراجعتها للفوز بنقاطها 🎯
+                          الكلمات التي تخطيتها أو صعبت عليك ونطقك لها وتريد مراجعتها للفوز بنقاطها 🎯
                         </div>
 
                         {filteredSkippedKeys.length === 0 ? (
