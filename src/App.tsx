@@ -2505,12 +2505,11 @@ export default function App() {
                   cy="96"
                 />
                 {/* Active Dynamic Progress Circle */}
-                <motion.circle
+                <circle
                   stroke="url(#splashGradient)"
                   strokeWidth="10"
                   strokeDasharray={502.65}
-                  animate={{ strokeDashoffset: 502.65 - (splashProgress / 100) * 502.65 }}
-                  transition={{ duration: 0.1, ease: "linear" }}
+                  strokeDashoffset={502.65 - (splashProgress / 100) * 502.65}
                   strokeLinecap="round"
                   fill="transparent"
                   r="80"
@@ -2527,9 +2526,11 @@ export default function App() {
             </div>
 
             {/* Application Name text underneath */}
-            <span className="text-4xl font-black tracking-widest text-pink-500 font-sans select-none animate-pulse">
-              stitchlab
-            </span>
+            <h1 className="text-4xl font-black tracking-tight select-none flex items-center justify-center">
+              <span className="text-purple-600">S</span>
+              <span className="text-purple-600">titch</span>
+              <span className="text-pink-500 font-black">lab</span>
+            </h1>
 
           </div>
         </div>
@@ -3301,7 +3302,7 @@ export default function App() {
                           S
                         </motion.span>
                       ) : (
-                        <span className="w-[1.1ch] inline-block"></span>
+                        <span className="text-purple-600 inline-block font-extrabold opacity-0 select-none pointer-events-none">S</span>
                       )}
                       <span className="text-purple-600">titch</span>
                       <span className="text-pink-500 font-black">lab</span>

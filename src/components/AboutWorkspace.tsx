@@ -52,7 +52,7 @@ export default function AboutWorkspace() {
                   S
                 </motion.span>
               ) : (
-                <span className="w-[1.1ch] inline-block"></span>
+                <span className="text-white inline-block font-black opacity-0 select-none pointer-events-none">S</span>
               )}
               <span className="text-white">titchlab</span>
             </h2>
