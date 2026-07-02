@@ -1510,7 +1510,9 @@ export default function HomeWorkspace({
                   src={currentWord.imageUrl} 
                   alt={currentWord.word} 
                   referrerPolicy="no-referrer"
-                  className="max-h-[260px] w-auto max-w-full object-contain rounded-xl select-none animate-fadeIn transition-all duration-500 ease-out"
+                  width={320}
+                  height={180}
+                  className="max-h-[260px] w-auto max-w-full aspect-video object-contain rounded-xl select-none animate-fadeIn transition-all duration-500 ease-out"
                 />
               ) : (
                 <div className="text-center p-6 flex flex-col items-center justify-center">
@@ -1981,7 +1983,9 @@ export default function HomeWorkspace({
             <img 
               src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
               alt="StitchLab" 
-              className="w-12 h-12 object-contain"
+              width={48}
+              height={48}
+              className="w-12 h-12 aspect-square object-contain"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -2037,7 +2041,9 @@ export default function HomeWorkspace({
               <img 
                 src={generatedImage} 
                 alt="StitchLab Challenge Card" 
-                className="w-full h-auto object-cover max-h-[220px]"
+                width={400}
+                height={225}
+                className="w-full h-auto aspect-video object-cover max-h-[220px]"
               />
             </div>
 
@@ -2139,7 +2145,9 @@ export default function HomeWorkspace({
                 <img 
                   src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
                   alt="StitchLab Logo" 
-                  className="w-full h-full object-contain"
+                  width={40}
+                  height={40}
+                  className="w-full h-full aspect-square object-contain"
                   referrerPolicy="no-referrer"
                 />
               </div>

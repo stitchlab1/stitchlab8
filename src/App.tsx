@@ -2462,7 +2462,9 @@ export default function App() {
                 src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
                 alt="StitchLab Logo" 
                 referrerPolicy="no-referrer" 
-                className="w-full h-full object-contain rounded-[32px]" 
+                width={144}
+                height={144}
+                className="w-full h-full aspect-square object-contain rounded-[32px]" 
               />
             </div>
             <div className="space-y-2">
@@ -2522,7 +2524,14 @@ export default function App() {
           <div className="w-full max-w-md space-y-6 relative z-10 text-center animate-fadeIn">
             <div className="space-y-2">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5">
-                <img src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" alt="stitchLab Logo" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
+                <img 
+                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  alt="stitchLab Logo" 
+                  referrerPolicy="no-referrer" 
+                  width={80}
+                  height={80}
+                  className="w-full h-full aspect-square object-contain" 
+                />
               </div>
               <h1 id="email-verify-heading" className="text-3xl font-extrabold text-purple-950 tracking-tight">
                 تأكيد البريد الإلكتروني ✉️
@@ -2651,7 +2660,14 @@ export default function App() {
           <div className="w-full max-w-md space-y-6 relative z-10 text-center">
             <div className="space-y-2">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5 animate-bounce">
-                <img src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" alt="stitchLab Logo" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
+                <img 
+                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  alt="stitchLab Logo" 
+                  referrerPolicy="no-referrer" 
+                  width={80}
+                  height={80}
+                  className="w-full h-full aspect-square object-contain" 
+                />
               </div>
               <h1 id="continue-heading" className="text-4xl font-extrabold text-purple-950 tracking-tight">
                 هيا لنكمل 🚀
@@ -2807,7 +2823,9 @@ export default function App() {
                     <img 
                       src={activeChallenge.snapshotB64} 
                       alt="بطاقة نتائج المتحدي" 
-                      className="w-full h-auto object-contain max-h-[250px] mx-auto md:max-h-[300px]"
+                      width={480}
+                      height={270}
+                      className="w-full h-auto aspect-video object-contain max-h-[250px] mx-auto md:max-h-[300px]"
                       referrerPolicy="no-referrer"
                     />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0e0929] to-transparent p-2 text-[9px] text-purple-200 font-bold text-center">
@@ -2912,7 +2930,14 @@ export default function App() {
             
             <div className="text-center space-y-2">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5 animate-fadeIn">
-                <img src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" alt="stitchLab Logo" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
+                <img 
+                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  alt="stitchLab Logo" 
+                  referrerPolicy="no-referrer" 
+                  width={80}
+                  height={80}
+                  className="w-full h-full aspect-square object-contain" 
+                />
               </div>
               <h1 id="stitchlab-brand-heading" className="text-5xl font-extrabold tracking-tight">
                 <span className="text-purple-600 font-extrabold">Stitch</span>
@@ -3200,7 +3225,14 @@ export default function App() {
                   
                   <div className="flex items-center gap-2.5">
                     <div className="w-10 h-10 rounded-xl bg-white border border-pink-100 shadow-sm overflow-hidden p-0.5 flex-shrink-0 select-none">
-                       <img src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" alt="stitchLab Logo" referrerPolicy="no-referrer" className="w-full h-full object-contain" />
+                       <img 
+                         src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                         alt="stitchLab Logo" 
+                         referrerPolicy="no-referrer" 
+                         width={40}
+                         height={40}
+                         className="w-full h-full aspect-square object-contain" 
+                       />
                     </div>
                     <div>
                       <h1 className="font-sans font-black text-xl tracking-tight">
