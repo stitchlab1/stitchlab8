@@ -2519,7 +2519,7 @@ export default function App() {
               </svg>
               {/* Counter Text in Center */}
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-5xl font-black text-purple-600 font-mono tracking-tight select-none">
+                <span className="text-5xl font-black text-purple-600 font-mono tracking-tight select-none tabular-nums inline-block w-32 text-center">
                   {splashProgress}%
                 </span>
               </div>
