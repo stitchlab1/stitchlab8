@@ -209,21 +209,25 @@ export default function App() {
       }
     }, 95); // 95ms * 100 = 9500ms, reaching 100 smoothly before 10 seconds
 
-    let introTimer: NodeJS.Timeout;
     const timer = setTimeout(() => {
       setShowSplash(false);
       setShowIntroS(true);
-      introTimer = setTimeout(() => {
-        setShowIntroS(false);
-      }, 2200); // 2.2 seconds animation
     }, 10000); // 10 seconds (شاشة ترحيبية بيضاء لمدة 10 ثوان)
 
     return () => {
       clearInterval(interval);
       clearTimeout(timer);
-      if (introTimer) clearTimeout(introTimer);
     };
   }, []);
+
+  useEffect(() => {
+    if (showIntroS) {
+      const timer = setTimeout(() => {
+        setShowIntroS(false);
+      }, 2200); // 2.2 seconds animation
+      return () => clearTimeout(timer);
+    }
+  }, [showIntroS]);
 
   // Login / Authentication States
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -2505,13 +2509,13 @@ export default function App() {
                   stroke="url(#splashGradient)"
                   strokeWidth="10"
                   strokeDasharray={502.65}
-                  strokeDashoffset={502.65 - (splashProgress / 100) * 502.65}
+                  animate={{ strokeDashoffset: 502.65 - (splashProgress / 100) * 502.65 }}
+                  transition={{ duration: 0.1, ease: "linear" }}
                   strokeLinecap="round"
                   fill="transparent"
                   r="80"
                   cx="96"
                   cy="96"
-                  className="transition-all duration-100 ease-linear"
                 />
               </svg>
               {/* Counter Text in Center */}
@@ -2563,28 +2567,17 @@ export default function App() {
       <AnimatePresence>
         {showIntroS && (
           <motion.div
-            className="fixed inset-0 flex items-center justify-center z-[99999] pointer-events-none bg-white/20 backdrop-blur-xs"
-            initial={{ opacity: 1 }}
+            className="fixed inset-0 flex items-center justify-center z-[99999] bg-white/25 backdrop-blur-xs pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.3 }}
           >
             <motion.span
+              layoutId="main-logo-s"
               className="text-9xl md:text-[14rem] font-black text-purple-600 font-sans tracking-tight filter drop-shadow-2xl"
-              initial={{ rotate: 0, scale: 0.1, opacity: 0 }}
-              animate={{ rotate: 720, scale: 1.2, opacity: 1 }}
-              exit={{ 
-                scale: 0.1, 
-                rotate: 1080,
-                // Glide towards top-right/left area
-                x: "-35vw",
-                y: "-45vh",
-                opacity: 0,
-              }}
-              transition={{ 
-                initial: { duration: 0 },
-                animate: { duration: 1.2, ease: "easeOut" },
-                exit: { duration: 0.8, ease: "easeInOut" }
-              }}
+              animate={{ rotate: 720 }}
+              transition={{ duration: 1.5, ease: "easeOut" }}
             >
               S
             </motion.span>
@@ -3299,14 +3292,17 @@ export default function App() {
                   
                   <div className="flex items-center gap-1 select-none">
                     <h1 className="font-sans font-black text-2xl tracking-tight flex items-center">
-                      <motion.span 
-                        className="text-purple-600 inline-block font-extrabold"
-                        initial={{ rotate: 0 }}
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1.5, ease: "easeInOut" }}
-                      >
-                        S
-                      </motion.span>
+                      {!showIntroS ? (
+                        <motion.span 
+                          layoutId="main-logo-s"
+                          className="text-purple-600 inline-block font-extrabold"
+                          transition={{ type: "spring", stiffness: 85, damping: 14 }}
+                        >
+                          S
+                        </motion.span>
+                      ) : (
+                        <span className="w-[1.1ch] inline-block"></span>
+                      )}
                       <span className="text-purple-600">titch</span>
                       <span className="text-pink-500 font-black">lab</span>
                     </h1>
