@@ -34,16 +34,37 @@ googleProvider.setCustomParameters({
 });
 
 
-// Initialize Analytics safely
+// Initialize Analytics safely after page load or when idle
 let analytics: any = null;
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
-    console.log("Firebase Analytics initialized successfully");
+
+const initAnalytics = () => {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+      console.log("Firebase Analytics initialized successfully after load");
+    }
+  }).catch((e) => {
+    console.warn("Firebase Analytics not supported in this environment:", e);
+  });
+};
+
+if (typeof window !== "undefined") {
+  if (document.readyState === "complete") {
+    if ("requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(() => initAnalytics());
+    } else {
+      setTimeout(initAnalytics, 3000);
+    }
+  } else {
+    window.addEventListener("load", () => {
+      if ("requestIdleCallback" in window) {
+        (window as any).requestIdleCallback(() => initAnalytics());
+      } else {
+        setTimeout(initAnalytics, 3000);
+      }
+    });
   }
-}).catch((e) => {
-  console.warn("Firebase Analytics not supported in this environment:", e);
-});
+}
 
 export { app, analytics, signInWithPopup, signOut, onAuthStateChanged };
 export type { FirebaseUser };
@@ -95,7 +116,7 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   throw new Error(JSON.stringify(errInfo));
 }
 
-// Validation check to test the connection to Firestore on initialization
+// Validation check to test the connection to Firestore on initialization (delayed to avoid blocking)
 async function testConnection() {
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
@@ -106,6 +127,11 @@ async function testConnection() {
     }
   }
 }
-testConnection();
+
+if (typeof window !== "undefined") {
+  window.addEventListener("load", () => {
+    setTimeout(testConnection, 5000);
+  });
+}
 
 
