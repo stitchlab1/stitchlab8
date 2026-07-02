@@ -22,7 +22,7 @@ export default function AboutWorkspace() {
       {/* Main Content Areas with exact text requested */}
       <div className="bg-slate-900 border border-slate-850 p-6 md:p-8 rounded-3xl space-y-6 shadow-sm">
         <p id="about-info-par1" className="text-sm md:text-base text-slate-200 font-bold leading-relaxed whitespace-pre-line antialiased">
-          StitchLab هو مساحة تعليمية مبتكرة تساعد على تعلم الكلمات والقواعد بطريقة ممتعة وتفاعلية. لنصنع معاً مستقبلاً مليئاً بالإبداع والمعرفة.
+          stitchlab هو مساحة تعليمية مبتكرة تساعد على تعلم الكلمات والقواعد بطريقة ممتعة وتفاعلية. لنصنع معاً مستقبلاً مليئاً بالإبداع والمعرفة.
         </p>
         
         <div className="w-16 h-[2px] bg-gradient-to-r from-[#ff758c] to-[#4f46e5] rounded-full"></div>

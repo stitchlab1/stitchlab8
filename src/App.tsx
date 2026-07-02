@@ -80,7 +80,6 @@ export default function App() {
   // Splash Screen State
   const [showSplash, setShowSplash] = useState<boolean>(true);
   const [splashProgress, setSplashProgress] = useState<number>(0);
-  const [showIntroS, setShowIntroS] = useState<boolean>(false);
 
   // Detect if the user is running inside the mobile app/webview wrapper
   const [isAppMode] = useState<boolean>(() => {
@@ -211,7 +210,6 @@ export default function App() {
 
     const timer = setTimeout(() => {
       setShowSplash(false);
-      setShowIntroS(true);
     }, 10000); // 10 seconds (شاشة ترحيبية بيضاء لمدة 10 ثوان)
 
     return () => {
@@ -219,15 +217,6 @@ export default function App() {
       clearTimeout(timer);
     };
   }, []);
-
-  useEffect(() => {
-    if (showIntroS) {
-      const timer = setTimeout(() => {
-        setShowIntroS(false);
-      }, 2200); // 2.2 seconds animation
-      return () => clearTimeout(timer);
-    }
-  }, [showIntroS]);
 
   // Login / Authentication States
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -2488,7 +2477,7 @@ export default function App() {
             
             {/* Elegant Circular Progress Gauge */}
             <div className="relative w-48 h-48 flex items-center justify-center select-none">
-              <svg className="w-48 h-48 transform -rotate-90">
+              <svg className="w-48 h-48 transform -rotate-90" viewBox="0 0 192 192" width="192" height="192">
                 <defs>
                   <linearGradient id="splashGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#9333EA" /> {/* purple-600 */}
@@ -2820,7 +2809,7 @@ export default function App() {
       ) : !isLoggedIn ? (
         <main 
           className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800 relative overflow-hidden"
-          style={{ backgroundColor: "#a13f3f", borderColor: "#4073c0" }}
+          style={{ backgroundColor: "#fdf2f9" }}
         >
           
           {/* Guest Challenge Invitation Card Overlay */}
@@ -2980,7 +2969,7 @@ export default function App() {
 
               <div className="text-center space-y-1" style={{ borderColor: "#3d4657", color: "#6380b2" }}>
                 <span className="text-xs bg-purple-100 text-purple-950 font-black px-3.5 py-1.5 rounded-full border border-purple-200 inline-block">
-                  بوابة الطالب الذكية 🎓
+                  بوابة الطالب الذكية
                 </span>
               </div>
 
@@ -2999,7 +2988,7 @@ export default function App() {
                       : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
-                  🗝️ تسجيل الدخول
+                  تسجيل الدخول
                 </button>
                 <button
                   type="button"
@@ -3015,7 +3004,7 @@ export default function App() {
                   }`}
                   style={{ color: "#b82f94" }}
                 >
-                  ➕ حساب جديد
+                  حساب جديد
                 </button>
               </div>
 
@@ -3028,7 +3017,7 @@ export default function App() {
 
               {authSuccessMessage && (
                 <div className="p-4 rounded-2xl text-[11px] bg-pink-50 border border-pink-100 text-pink-800 font-bold leading-relaxed text-right animate-fadeIn">
-                  🎉 {authSuccessMessage}
+                  {authSuccessMessage}
                 </div>
               )}
 
@@ -3037,7 +3026,7 @@ export default function App() {
                 <form onSubmit={authMode === "login" ? handleEmailSignIn : handleEmailSignUp} className="space-y-3">
 
                   <div className="space-y-1 text-right">
-                    <label className="text-[10px] font-black text-slate-500 mr-1 block">البريد الإلكتروني ✉️</label>
+                    <label className="text-[10px] font-black text-slate-500 mr-1 block">البريد الإلكتروني</label>
                     <input
                       type="email"
                       required
@@ -3050,7 +3039,7 @@ export default function App() {
                   </div>
 
                   <div className="space-y-1 text-right">
-                    <label className="text-[10px] font-black text-slate-500 mr-1 block">كلمة المرور 🔒</label>
+                    <label className="text-[10px] font-black text-slate-500 mr-1 block">كلمة المرور</label>
                     <input
                       type="password"
                       required
@@ -3073,7 +3062,7 @@ export default function App() {
                         }}
                         className="text-[10px] text-purple-600 hover:text-purple-700 font-extrabold hover:underline cursor-pointer"
                       >
-                        🔑 نسيت كلمة المرور؟ إعادة تعيين كلمة المرور
+                        نسيت كلمة المرور؟ إعادة تعيين كلمة المرور
                       </button>
                     </div>
                   )}
@@ -3132,23 +3121,23 @@ export default function App() {
                     {authLoading ? (
                       <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
                     ) : authMode === "login" ? (
-                      "دخول للمختبر 🗝️"
+                      "دخول للمختبر"
                     ) : (
-                      "إنشاء الحساب والمتابعة 🎯"
+                      "إنشاء الحساب والمتابعة"
                     )}
                   </button>
                 </form>
               ) : (
                 <form onSubmit={handleForgotPassword} className="space-y-3.5">
                   <div className="text-right space-y-1">
-                    <h3 className="text-xs font-black text-purple-950">إعادة تعيين كلمة المرور 🔑</h3>
+                    <h3 className="text-xs font-black text-purple-950">إعادة تعيين كلمة المرور</h3>
                     <p className="text-[10px] text-slate-400 font-bold leading-relaxed">
                       أدخل بريدك الإلكتروني المسجل أدناه لإرسال كود/رابط تعيين كلمة مرور جديدة وتعيينها لحسابك مباشرة.
                     </p>
                   </div>
 
                   <div className="space-y-1 text-right">
-                    <label className="text-[10px] font-black text-slate-500 mr-1 block">البريد الإلكتروني لحسابك ✉️</label>
+                    <label className="text-[10px] font-black text-slate-500 mr-1 block">البريد الإلكتروني لحسابك</label>
                     <input
                       type="email"
                       required
@@ -3167,7 +3156,7 @@ export default function App() {
                     {authLoading ? (
                       <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin"></span>
                     ) : (
-                      "إرسال كود التعيين بالبريد 📤"
+                      "إرسال كود التعيين بالبريد"
                     )}
                   </button>
 
@@ -3180,7 +3169,7 @@ export default function App() {
                     }}
                     className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all text-center cursor-pointer"
                   >
-                    ↩ العودة لتسجيل الدخول
+                    العودة لتسجيل الدخول
                   </button>
                 </form>
               )}
