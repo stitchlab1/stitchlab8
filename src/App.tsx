@@ -2527,8 +2527,7 @@ export default function App() {
 
             {/* Application Name text underneath */}
             <h1 className="text-4xl font-black tracking-tight select-none flex items-center justify-center">
-              <span className="text-purple-600">S</span>
-              <span className="text-purple-600">titch</span>
+              <span className="text-purple-600 font-extrabold">stitch</span>
               <span className="text-pink-500 font-black">lab</span>
             </h1>
 
@@ -2564,28 +2563,6 @@ export default function App() {
   return (
     <div id="stitchlab-main" className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-purple-500 selection:text-white" dir="rtl">
       
-      {/* Absolute floating intro S animation */}
-      <AnimatePresence>
-        {showIntroS && (
-          <motion.div
-            className="fixed inset-0 flex items-center justify-center z-[99999] bg-white/25 backdrop-blur-xs pointer-events-none"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <motion.span
-              layoutId="main-logo-s"
-              className="text-9xl md:text-[14rem] font-black text-purple-600 font-sans tracking-tight filter drop-shadow-2xl"
-              animate={{ rotate: 720 }}
-              transition={{ duration: 1.5, ease: "easeOut" }}
-            >
-              S
-            </motion.span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* 1. NOT LOGGED IN LAYOUT / OR LOADING SATELLITE */}
       {showEmailVerificationScreen && auth.currentUser ? (
         <div id="stitchlab-email-verify-step" className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800 relative overflow-hidden" dir="rtl">
@@ -2597,7 +2574,7 @@ export default function App() {
             <div className="space-y-2">
               <div className="inline-flex items-center justify-center mb-2">
                 <h2 className="text-4xl font-black font-sans tracking-tight">
-                  <span className="text-purple-600">Stitch</span>
+                  <span className="text-purple-600">stitch</span>
                   <span className="text-pink-500">lab</span>
                 </h2>
               </div>
@@ -2727,16 +2704,6 @@ export default function App() {
           
           <div className="w-full max-w-md space-y-6 relative z-10 text-center">
             <div className="space-y-2">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5 animate-bounce">
-                <img 
-                  src="/stitchlab_icon_hd.png" 
-                  alt="stitchLab Logo" 
-                  referrerPolicy="no-referrer" 
-                  width={80}
-                  height={80}
-                  className="w-full h-full aspect-square object-contain" 
-                />
-              </div>
               <h1 id="continue-heading" className="text-4xl font-extrabold text-purple-950 tracking-tight">
                 هيا لنكمل 🚀
               </h1>
@@ -2997,19 +2964,9 @@ export default function App() {
             )}
             
             <div className="text-center space-y-2">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5 animate-fadeIn">
-                <img 
-                  src="/stitchlab_icon_hd.png" 
-                  alt="stitchLab Logo" 
-                  referrerPolicy="no-referrer" 
-                  width={80}
-                  height={80}
-                  className="w-full h-full aspect-square object-contain" 
-                />
-              </div>
               <h1 id="stitchlab-brand-heading" className="text-5xl font-extrabold tracking-tight">
-                <span className="text-purple-600 font-extrabold">Stitch</span>
-                <span className="text-pink-500 font-black">Lab</span>
+                <span className="text-purple-600 font-extrabold">stitch</span>
+                <span className="text-pink-500 font-black">lab</span>
               </h1>
               <div className="w-20 h-1 bg-gradient-to-r from-purple-600 to-pink-500 mx-auto rounded-full mt-4"></div>
             </div>
@@ -3293,18 +3250,7 @@ export default function App() {
                   
                   <div className="flex items-center gap-1 select-none">
                     <h1 className="font-sans font-black text-2xl tracking-tight flex items-center">
-                      {!showIntroS ? (
-                        <motion.span 
-                          layoutId="main-logo-s"
-                          className="text-purple-600 inline-block font-extrabold"
-                          transition={{ type: "spring", stiffness: 85, damping: 14 }}
-                        >
-                          S
-                        </motion.span>
-                      ) : (
-                        <span className="text-purple-600 inline-block font-extrabold opacity-0 select-none pointer-events-none">S</span>
-                      )}
-                      <span className="text-purple-600">titch</span>
+                      <span className="text-purple-600 font-extrabold">stitch</span>
                       <span className="text-pink-500 font-black">lab</span>
                     </h1>
                   </div>
