@@ -2575,8 +2575,8 @@ export default function App() {
               exit={{ 
                 scale: 0.1, 
                 rotate: 1080,
-                // Glide towards top-right area (logo position in RTL)
-                x: "40vw",
+                // Glide towards top-right/left area
+                x: "-35vw",
                 y: "-45vh",
                 opacity: 0,
               }}
@@ -3297,14 +3297,13 @@ export default function App() {
               <header className="border-b border-pink-100 bg-white/95 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 py-3.5 shadow-[0_12px_35px_rgba(236,72,153,0.03)] relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                   
-                  <div className="flex items-center select-none">
-                    <h1 className="font-sans font-black text-2xl tracking-tight flex items-center leading-none">
+                  <div className="flex items-center gap-1 select-none">
+                    <h1 className="font-sans font-black text-2xl tracking-tight flex items-center">
                       <motion.span 
-                        className="text-purple-600 inline-block"
+                        className="text-purple-600 inline-block font-extrabold"
                         initial={{ rotate: 0 }}
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1.5, ease: "easeInOut" }}
-                        style={{ display: "inline-block" }}
                       >
                         S
                       </motion.span>
