@@ -61,8 +61,9 @@ import { getFilteredCompletedAndSkipped } from "./utils/wordFilters";
 import confetti from "canvas-confetti";
 import domtoimage from "dom-to-image";
 
+import HomeWorkspace from "./components/HomeWorkspace";
+
 // Lazy-loaded workspaces and panels for maximum performance and lower bundle size
-const HomeWorkspace = React.lazy(() => import("./components/HomeWorkspace"));
 const AchievementsWorkspace = React.lazy(() => import("./components/AchievementsWorkspace"));
 const AboutWorkspace = React.lazy(() => import("./components/AboutWorkspace"));
 const LearningTimer = React.lazy(() => import("./components/LearningTimer"));
@@ -78,6 +79,7 @@ import welcomeRabbit from "./assets/1000000038.webp";
 export default function App() {
   // Splash Screen State
   const [showSplash, setShowSplash] = useState<boolean>(true);
+  const [splashProgress, setSplashProgress] = useState<number>(0);
 
   // Detect if the user is running inside the mobile app/webview wrapper
   const [isAppMode] = useState<boolean>(() => {
@@ -195,10 +197,25 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    let current = 0;
+    const interval = setInterval(() => {
+      current += 1;
+      if (current >= 100) {
+        setSplashProgress(100);
+        clearInterval(interval);
+      } else {
+        setSplashProgress(current);
+      }
+    }, 95); // 95ms * 100 = 9500ms, reaching 100 smoothly before 10 seconds
+
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 10000); // 10 seconds (شاشة ترحيبية بيضاء لمدة 10 ثوان)
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
   }, []);
 
   // Login / Authentication States
@@ -2457,22 +2474,13 @@ export default function App() {
 
         <div className="max-w-md w-full relative z-10 space-y-6">
           <div className="text-center space-y-6 animate-fadeIn">
-            <div className="inline-flex items-center justify-center w-36 h-36 rounded-[40px] bg-white border border-pink-100 shadow-2xl overflow-hidden p-2.5 mx-auto">
-              <img 
-                src="/stitchlab_icon_hd.png" 
-                alt="StitchLab Logo" 
-                referrerPolicy="no-referrer" 
-                width={144}
-                height={144}
-                fetchPriority="high"
-                className="w-full h-full aspect-square object-contain rounded-[32px]" 
-              />
-            </div>
-            <div className="space-y-2">
-              <h1 className="text-5xl font-black tracking-tight font-sans">
-                <span className="text-purple-600">Stitch</span>
-                <span className="text-pink-500">Lab</span>
-              </h1>
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <span className="text-7xl md:text-9xl font-black text-purple-600 tracking-tight font-mono select-none">
+                {splashProgress}
+              </span>
+              <span className="text-3xl font-extrabold tracking-widest text-pink-500 font-sans mt-1 select-none">
+                stitchlab
+              </span>
             </div>
             {/* Progress Bar Indicator for 10 seconds */}
             <div className="w-56 h-2 md:h-2.5 bg-pink-100/60 mx-auto rounded-full overflow-hidden relative border border-pink-200/50">
@@ -3224,23 +3232,19 @@ export default function App() {
               <header className="border-b border-pink-100 bg-white/95 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 py-3.5 shadow-[0_12px_35px_rgba(236,72,153,0.03)] relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                   
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-white border border-pink-100 shadow-sm overflow-hidden p-0.5 flex-shrink-0 select-none">
-                       <img 
-                         src="/stitchlab_icon_hd.png" 
-                         alt="stitchLab Logo" 
-                         referrerPolicy="no-referrer" 
-                         width={40}
-                         height={40}
-                         className="w-full h-full aspect-square object-contain" 
-                       />
-                    </div>
-                    <div>
-                      <h1 className="font-sans font-black text-xl tracking-tight">
-                        <span className="text-purple-600 font-extrabold">Stitch</span>
-                        <span className="text-pink-500 font-black">Lab</span>
-                      </h1>
-                    </div>
+                  <div className="flex items-center gap-1 select-none">
+                    <h1 className="font-sans font-black text-2xl tracking-tight flex items-center">
+                      <motion.span 
+                        className="text-purple-600 inline-block font-extrabold"
+                        initial={{ rotate: 0 }}
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                      >
+                        S
+                      </motion.span>
+                      <span className="text-purple-600">titch</span>
+                      <span className="text-pink-500 font-black">lab</span>
+                    </h1>
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 sm:gap-4">
@@ -3471,7 +3475,7 @@ export default function App() {
                         </div>
                       </motion.div>
                     )}
-                    <Suspense fallback={<div className="p-12 text-center text-purple-600 font-bold" dir="rtl">جاري تحميل لوحة التحكم الرئيسية... 🚀</div>}>
+                    <Suspense fallback={null}>
                       <HomeWorkspace
                       unlockedLevel={unlockedLevel}
                       completedLevels={completedLevels}

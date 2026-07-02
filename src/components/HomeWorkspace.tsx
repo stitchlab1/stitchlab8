@@ -1504,15 +1504,15 @@ export default function HomeWorkspace({
           {/* STEP 1: Full-Size Image & Beautiful Arabic Translation */}
           <div className="w-full glass-card p-6 relative overflow-hidden ring-1 ring-pink-100">
             {/* Word image card showing FULL IMAGE without crop restriction */}
-            <div className="w-full min-h-[190px] max-h-[300px] mt-1 bg-white/80 border border-pink-100/40 rounded-2xl overflow-hidden flex items-center justify-center p-3 shadow-inner">
+            <div className="w-full min-h-[260px] max-h-[380px] mt-1 bg-white border border-pink-100/40 rounded-2xl overflow-hidden flex items-center justify-center p-2 shadow-inner">
               {currentWord.imageUrl ? (
                 <img 
                   src={currentWord.imageUrl} 
                   alt={currentWord.word} 
                   referrerPolicy="no-referrer"
-                  width={320}
-                  height={180}
-                  className="max-h-[260px] w-auto max-w-full aspect-video object-contain rounded-xl select-none animate-fadeIn transition-all duration-500 ease-out"
+                  width={400}
+                  height={300}
+                  className="max-h-[350px] w-auto max-w-full object-contain rounded-xl select-none animate-fadeIn transition-all duration-500 ease-out"
                 />
               ) : (
                 <div className="text-center p-6 flex flex-col items-center justify-center">
@@ -1979,17 +1979,7 @@ export default function HomeWorkspace({
         dir="rtl"
       >
         <div className="flex flex-col items-center justify-center gap-1.5 border-b border-white/10 pb-4 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-white/10 p-1 flex items-center justify-center shadow-lg">
-            <img 
-              src="/stitchlab_icon_hd.png" 
-              alt="StitchLab" 
-              width={48}
-              height={48}
-              className="w-12 h-12 aspect-square object-contain"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <h2 className="text-lg font-black text-amber-300 mt-1">StitchLab 🔮</h2>
+          <h2 className="text-xl font-black text-amber-300">StitchLab 🔮</h2>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -2141,15 +2131,8 @@ export default function HomeWorkspace({
             <div className="absolute top-[-30%] left-[-10%] w-24 h-24 bg-pink-400/20 rounded-full blur-xl pointer-events-none"></div>
             
             <div className="flex items-center gap-3 relative z-10">
-              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1 border border-white/20 shadow-sm shrink-0">
-                <img 
-                  src="/stitchlab_icon_hd.png" 
-                  alt="StitchLab Logo" 
-                  width={40}
-                  height={40}
-                  className="w-full h-full aspect-square object-contain"
-                  referrerPolicy="no-referrer"
-                />
+              <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-lg shadow-sm shrink-0">
+                📲
               </div>
               <div className="text-right">
                 <h4 className="text-xs font-black text-white">ثبّت تطبيق StitchLab على هاتف الموبايل 📲</h4>
