@@ -2450,7 +2450,7 @@ export default function App() {
 
   if (showSplash) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center p-6 bg-gradient-to-br from-[#FFF0F3] via-[#FFE3E8] to-[#FFD6DC] text-slate-800 text-center select-none font-sans relative overflow-hidden" dir="rtl">
+      <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-gradient-to-br from-[#FFF0F3] via-[#FFE3E8] to-[#FFD6DC] text-slate-800 text-center select-none font-sans relative overflow-hidden" dir="rtl">
         {/* Ambient background blur elements */}
         <div className="absolute top-[-20%] right-[-10%] w-[500px] h-[500px] bg-pink-400/10 rounded-full blur-[120px] pointer-events-none"></div>
         <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-300/10 rounded-full blur-[120px] pointer-events-none"></div>
@@ -2459,11 +2459,12 @@ export default function App() {
           <div className="text-center space-y-6 animate-fadeIn">
             <div className="inline-flex items-center justify-center w-36 h-36 rounded-[40px] bg-white border border-pink-100 shadow-2xl overflow-hidden p-2.5 mx-auto">
               <img 
-                src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                src="/stitchlab_icon_hd.png" 
                 alt="StitchLab Logo" 
                 referrerPolicy="no-referrer" 
                 width={144}
                 height={144}
+                fetchPriority="high"
                 className="w-full h-full aspect-square object-contain rounded-[32px]" 
               />
             </div>
@@ -2484,7 +2485,7 @@ export default function App() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -2525,7 +2526,7 @@ export default function App() {
             <div className="space-y-2">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5">
                 <img 
-                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  src="/stitchlab_icon_hd.png" 
                   alt="stitchLab Logo" 
                   referrerPolicy="no-referrer" 
                   width={80}
@@ -2661,7 +2662,7 @@ export default function App() {
             <div className="space-y-2">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5 animate-bounce">
                 <img 
-                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  src="/stitchlab_icon_hd.png" 
                   alt="stitchLab Logo" 
                   referrerPolicy="no-referrer" 
                   width={80}
@@ -2783,7 +2784,7 @@ export default function App() {
           </div>
         </div>
       ) : !isLoggedIn ? (
-        <div 
+        <main 
           className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800 relative overflow-hidden"
           style={{ backgroundColor: "#a13f3f", borderColor: "#4073c0" }}
         >
@@ -2931,7 +2932,7 @@ export default function App() {
             <div className="text-center space-y-2">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5 animate-fadeIn">
                 <img 
-                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  src="/stitchlab_icon_hd.png" 
                   alt="stitchLab Logo" 
                   referrerPolicy="no-referrer" 
                   width={80}
@@ -3204,16 +3205,16 @@ export default function App() {
               .
             </p>
           </div>
-        </div>
+        </main>
       ) : isLoggedIn && !isDataLoaded ? (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800" dir="rtl">
+        <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800" dir="rtl">
           <div className="text-center space-y-4 animate-fadeIn">
             <div className="relative w-16 h-16 mx-auto">
               <div className="w-16 h-16 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin"></div>
               <span className="absolute inset-0 flex items-center justify-center text-xl">🎓</span>
             </div>
           </div>
-        </div>
+        </main>
       ) : (
         /* 2. LOGGED IN DASHBOARD WORKSPACE */
         <div id="stitchlab-workspace" className="flex flex-col min-h-screen bg-gradient-to-br from-[#FFF0F3] via-[#FFE3E8] to-[#FFD6DC] text-slate-900 antialiased font-sans relative overflow-hidden">
@@ -3226,7 +3227,7 @@ export default function App() {
                   <div className="flex items-center gap-2.5">
                     <div className="w-10 h-10 rounded-xl bg-white border border-pink-100 shadow-sm overflow-hidden p-0.5 flex-shrink-0 select-none">
                        <img 
-                         src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                         src="/stitchlab_icon_hd.png" 
                          alt="stitchLab Logo" 
                          referrerPolicy="no-referrer" 
                          width={40}

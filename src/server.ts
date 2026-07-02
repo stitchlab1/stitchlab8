@@ -10,6 +10,33 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
+// High-performance security headers for 100% PageSpeed Insights score
+app.use((req, res, next) => {
+  // 1. Cross-Origin-Opener-Policy (COOP) to protect from origin leaks
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+
+  // 2. X-Content-Type-Options to prevent MIME-sniffing
+  res.setHeader("X-Content-Type-Options", "nosniff");
+
+  // 3. Referrer-Policy
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+
+  // 4. Content-Security-Policy (CSP) with comprehensive origin rules
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://apis.google.com https://www.gstatic.com https://*.firebaseapp.com https://pl29694839.effectivecpmnetwork.com; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+    "font-src 'self' data: https://fonts.gstatic.com; " +
+    "img-src 'self' data: blob: https://raw.githubusercontent.com https://*.googleapis.com https://*.firebaseapp.com; " +
+    "media-src 'self' data: blob:; " +
+    "connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.googleapis.com wss://*.run.app; " +
+    "frame-ancestors 'self' https://*.run.app https://ai.studio https://*.google.com https://*.google.usercontent.com;"
+  );
+
+  next();
+});
+
 app.use(express.json());
 
 // Intercept GET "/" to serve customized index.html with Open Graph tags when academyInvite query parameter is present (active in production only)
@@ -29,11 +56,10 @@ app.get("/", (req, res, next) => {
         ? `لقد دعاك صديقك ${inviterName} للانضمام إلى صفوف StitchLab!` 
         : `لقد دعاك صديقك للانضمام إلى صفوف StitchLab!`;
       const description = `اضغط هنا لقبول الدعوة والبدء في التحدي الدراسي`;
-      const image = previewImage || "https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png";
-
       const protocol = req.protocol;
       const host = req.get("host");
       const fullUrl = `${protocol}://${host}${req.originalUrl || req.url}`;
+      const image = previewImage || `${protocol}://${host}/stitchlab_icon_hd.png`;
 
       const ogTags = `
     <!-- Dynamically Injected Open Graph tags by StitchLab server -->

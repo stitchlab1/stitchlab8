@@ -10,7 +10,7 @@ export default function AboutWorkspace() {
         <div className="flex items-center gap-4 relative z-10">
           <div className="w-14 h-14 bg-white/95 rounded-2xl p-1.5 shadow-md overflow-hidden shrink-0">
             <img 
-              src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+              src="/stitchlab_icon_hd.png" 
               alt="StitchLab Logo" 
               referrerPolicy="no-referrer" 
               width={56}

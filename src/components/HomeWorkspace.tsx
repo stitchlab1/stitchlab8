@@ -1981,7 +1981,7 @@ export default function HomeWorkspace({
         <div className="flex flex-col items-center justify-center gap-1.5 border-b border-white/10 pb-4 text-center">
           <div className="w-14 h-14 rounded-2xl bg-white/10 p-1 flex items-center justify-center shadow-lg">
             <img 
-              src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+              src="/stitchlab_icon_hd.png" 
               alt="StitchLab" 
               width={48}
               height={48}
@@ -2143,7 +2143,7 @@ export default function HomeWorkspace({
             <div className="flex items-center gap-3 relative z-10">
               <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center p-1 border border-white/20 shadow-sm shrink-0">
                 <img 
-                  src="https://raw.githubusercontent.com/stitchlab1/stitchlab2/0ceec11a5ca77c5d4607a90cab424bc9ec880155/stitchlab_icon_hd.png" 
+                  src="/stitchlab_icon_hd.png" 
                   alt="StitchLab Logo" 
                   width={40}
                   height={40}
