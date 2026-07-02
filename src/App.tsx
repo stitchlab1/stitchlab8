@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, Suspense } from "react";
 import {
   BookOpen,
   Send,
@@ -56,20 +56,20 @@ import {
   onSnapshot
 } from "firebase/firestore";
 import { findBackupFile, getBackupContent, saveBackup, uploadPublicImage, type BackupPayload } from "./lib/googleDriveService";
-import HomeWorkspace from "./components/HomeWorkspace";
 import staticSheetWords from "./data/staticSheetWords.json";
 import { getFilteredCompletedAndSkipped } from "./utils/wordFilters";
 import confetti from "canvas-confetti";
-import AchievementsWorkspace from "./components/AchievementsWorkspace";
-import AboutWorkspace from "./components/AboutWorkspace";
-import LearningTimer from "./components/LearningTimer";
 import domtoimage from "dom-to-image";
 
-// Import newly refactored dynamic panels
-import ChatPanel from "./components/ChatPanel";
-import AnalyzerPanel from "./components/AnalyzerPanel";
-import QuizPanel from "./components/QuizPanel";
-import FlashcardsPanel from "./components/FlashcardsPanel";
+// Lazy-loaded workspaces and panels for maximum performance and lower bundle size
+const HomeWorkspace = React.lazy(() => import("./components/HomeWorkspace"));
+const AchievementsWorkspace = React.lazy(() => import("./components/AchievementsWorkspace"));
+const AboutWorkspace = React.lazy(() => import("./components/AboutWorkspace"));
+const LearningTimer = React.lazy(() => import("./components/LearningTimer"));
+const ChatPanel = React.lazy(() => import("./components/ChatPanel"));
+const AnalyzerPanel = React.lazy(() => import("./components/AnalyzerPanel"));
+const QuizPanel = React.lazy(() => import("./components/QuizPanel"));
+const FlashcardsPanel = React.lazy(() => import("./components/FlashcardsPanel"));
 
 // Import motion & beautiful custom brand assets
 import { motion, AnimatePresence } from "motion/react";
@@ -3470,52 +3470,54 @@ export default function App() {
                         </div>
                       </motion.div>
                     )}
-                    <HomeWorkspace
-                    unlockedLevel={unlockedLevel}
-                    completedLevels={completedLevels}
-                    currentTickTime={currentTickTime}
-                    bonusMinutes={bonusMinutes}
-                    setBonusMinutes={setBonusMinutes}
-                    dailySecondsLeft={dailySecondsLeft}
-                    extraAdClaimsCount={extraAdClaimsCount}
-                    unlockedAdvertiserGroups={unlockedAdvertiserGroups}
-                    completedGroupsProp={completedGroups}
-                    setCompletedGroupsProp={setCompletedGroups}
-                    completedWordsCount={completedWordsCount}
-                    setCompletedWordsCount={setCompletedWordsCount}
-                    studentSemester={studentSemester}
-                    points={points}
-                    setPoints={setPoints}
-                    completedWordKeys={completedWordKeys}
-                    setCompletedWordKeys={setCompletedWordKeys}
-                    skippedWordKeys={skippedWordKeys}
-                    setSkippedWordKeys={setSkippedWordKeys}
-                    reviewTargetWord={reviewTargetWord}
-                    setReviewTargetWord={setReviewTargetWord}
-                    onUnlockGroup={(gKey) => {
-                      if (unlockedAdvertiserGroups.includes(gKey)) return;
-                      const prevTotal = unlockedAdvertiserGroups.length;
-                      let nextGroups: string[];
-                      if (prevTotal === 0) {
-                        nextGroups = [gKey]; // if first group, set/put 1 in it
-                      } else {
-                        nextGroups = [...unlockedAdvertiserGroups, gKey]; // previous total + 1
-                      }
-                      setUnlockedAdvertiserGroups(nextGroups);
-                      try {
-                        localStorage.setItem("stitchlab_unlocked_ad_groups", JSON.stringify(nextGroups));
-                      } catch (e) {}
-                    }}
-                    onLevelStart={(level) => {
-                      setSelectedPersona(PRESET_PERSONAS.find(p => p.id === level.personaId) || PRESET_PERSONAS[0]);
-                      setMainTab("training");
-                      setActiveTab("chat");
-                    }}
-                    onLevelComplete={(lvlNum) => completeLevel(lvlNum)}
-                    onResetProgress={resetAllLevelsProgress}
-                    LEARNING_LEVELS={LEARNING_LEVELS}
-                    onForceSaveProgress={handleForceSaveProgress}
-                  />
+                    <Suspense fallback={<div className="p-12 text-center text-purple-600 font-bold" dir="rtl">جاري تحميل لوحة التحكم الرئيسية... 🚀</div>}>
+                      <HomeWorkspace
+                      unlockedLevel={unlockedLevel}
+                      completedLevels={completedLevels}
+                      currentTickTime={currentTickTime}
+                      bonusMinutes={bonusMinutes}
+                      setBonusMinutes={setBonusMinutes}
+                      dailySecondsLeft={dailySecondsLeft}
+                      extraAdClaimsCount={extraAdClaimsCount}
+                      unlockedAdvertiserGroups={unlockedAdvertiserGroups}
+                      completedGroupsProp={completedGroups}
+                      setCompletedGroupsProp={setCompletedGroups}
+                      completedWordsCount={completedWordsCount}
+                      setCompletedWordsCount={setCompletedWordsCount}
+                      studentSemester={studentSemester}
+                      points={points}
+                      setPoints={setPoints}
+                      completedWordKeys={completedWordKeys}
+                      setCompletedWordKeys={setCompletedWordKeys}
+                      skippedWordKeys={skippedWordKeys}
+                      setSkippedWordKeys={setSkippedWordKeys}
+                      reviewTargetWord={reviewTargetWord}
+                      setReviewTargetWord={setReviewTargetWord}
+                      onUnlockGroup={(gKey) => {
+                        if (unlockedAdvertiserGroups.includes(gKey)) return;
+                        const prevTotal = unlockedAdvertiserGroups.length;
+                        let nextGroups: string[];
+                        if (prevTotal === 0) {
+                          nextGroups = [gKey]; // if first group, set/put 1 in it
+                        } else {
+                          nextGroups = [...unlockedAdvertiserGroups, gKey]; // previous total + 1
+                        }
+                        setUnlockedAdvertiserGroups(nextGroups);
+                        try {
+                          localStorage.setItem("stitchlab_unlocked_ad_groups", JSON.stringify(nextGroups));
+                        } catch (e) {}
+                      }}
+                      onLevelStart={(level) => {
+                        setSelectedPersona(PRESET_PERSONAS.find(p => p.id === level.personaId) || PRESET_PERSONAS[0]);
+                        setMainTab("training");
+                        setActiveTab("chat");
+                      }}
+                      onLevelComplete={(lvlNum) => completeLevel(lvlNum)}
+                      onResetProgress={resetAllLevelsProgress}
+                      LEARNING_LEVELS={LEARNING_LEVELS}
+                      onForceSaveProgress={handleForceSaveProgress}
+                    />
+                  </Suspense>
                   </>
                 )}
 
@@ -3582,112 +3584,118 @@ export default function App() {
                     </div>
 
                     <div className="bg-slate-900 border border-slate-800 rounded-[32px] p-6 shadow-2xl relative overflow-hidden ring-1 ring-slate-800/50">
-                      {activeTab === "chat" && (
-                        <ChatPanel
-                          selectedPersona={selectedPersona}
-                          onChangePersona={setSelectedPersona}
-                          chatInputValue={chatInputValue}
-                          setChatInputValue={setChatInputValue}
-                          chatHistory={getActiveChatMessages()}
-                          chatLoading={chatLoading}
-                          chatTranslateToggle={!!chatTranslateToggle[selectedPersona.id]}
-                          setChatTranslateToggle={(val) =>
-                            setChatTranslateToggle((prev) => ({ ...prev, [selectedPersona.id]: val }))
-                          }
-                          onSendMessage={handleSendMessage}
-                          onClearHistory={clearChatHistory}
-                          speakText={speakText}
-                          onQuickPaste={handleQuickPaste}
-                        />
-                      )}
+                      <Suspense fallback={<div className="p-8 text-center text-purple-400 font-bold" dir="rtl">جاري تحميل أداة التدريب... 🎙️</div>}>
+                        {activeTab === "chat" && (
+                          <ChatPanel
+                            selectedPersona={selectedPersona}
+                            onChangePersona={setSelectedPersona}
+                            chatInputValue={chatInputValue}
+                            setChatInputValue={setChatInputValue}
+                            chatHistory={getActiveChatMessages()}
+                            chatLoading={chatLoading}
+                            chatTranslateToggle={!!chatTranslateToggle[selectedPersona.id]}
+                            setChatTranslateToggle={(val) =>
+                              setChatTranslateToggle((prev) => ({ ...prev, [selectedPersona.id]: val }))
+                            }
+                            onSendMessage={handleSendMessage}
+                            onClearHistory={clearChatHistory}
+                            speakText={speakText}
+                            onQuickPaste={handleQuickPaste}
+                          />
+                        )}
 
-                      {activeTab === "analyzer" && (
-                        <AnalyzerPanel
-                          analyzerInputValue={analyzerInputValue}
-                          setAnalyzerInputValue={setAnalyzerInputValue}
-                          analyzerLoading={analyzerLoading}
-                          analyzerResult={analyzerResult}
-                          analyzerError={analyzerError}
-                          onAnalyzeSubmit={handleAnalyzeSentence}
-                          onQuickPaste={handleQuickPaste}
-                        />
-                      )}
+                        {activeTab === "analyzer" && (
+                          <AnalyzerPanel
+                            analyzerInputValue={analyzerInputValue}
+                            setAnalyzerInputValue={setAnalyzerInputValue}
+                            analyzerLoading={analyzerLoading}
+                            analyzerResult={analyzerResult}
+                            analyzerError={analyzerError}
+                            onAnalyzeSubmit={handleAnalyzeSentence}
+                            onQuickPaste={handleQuickPaste}
+                          />
+                        )}
 
-                      {activeTab === "quiz" && (
-                        <QuizPanel
-                          quizTopic={quizTopic}
-                          setQuizTopic={setQuizTopic}
-                          quizCustomTopic={quizCustomTopic}
-                          setQuizCustomTopic={setQuizCustomTopic}
-                          quizLevel={quizLevel}
-                          setQuizLevel={setQuizLevel}
-                          quizLoading={quizLoading}
-                          quizQuestions={quizQuestions}
-                          selectedAnswers={selectedAnswers}
-                          submittedQuiz={submittedQuiz}
-                          quizError={quizError}
-                          quizScore={quizScore}
-                          onGenerateQuiz={handleGenerateQuiz}
-                          onSelectAnswer={handleSelectAnswer}
-                          onGradeQuiz={handleGradeQuiz}
-                        />
-                      )}
+                        {activeTab === "quiz" && (
+                          <QuizPanel
+                            quizTopic={quizTopic}
+                            setQuizTopic={setQuizTopic}
+                            quizCustomTopic={quizCustomTopic}
+                            setQuizCustomTopic={setQuizCustomTopic}
+                            quizLevel={quizLevel}
+                            setQuizLevel={setQuizLevel}
+                            quizLoading={quizLoading}
+                            quizQuestions={quizQuestions}
+                            selectedAnswers={selectedAnswers}
+                            submittedQuiz={submittedQuiz}
+                            quizError={quizError}
+                            quizScore={quizScore}
+                            onGenerateQuiz={handleGenerateQuiz}
+                            onSelectAnswer={handleSelectAnswer}
+                            onGradeQuiz={handleGradeQuiz}
+                          />
+                        )}
 
-                      {activeTab === "flashcards" && (
-                        <FlashcardsPanel
-                          flashcardSearch={flashcardSearch}
-                          setFlashcardSearch={setFlashcardSearch}
-                          flashcardLevelFilter={flashcardLevelFilter}
-                          setFlashcardLevelFilter={setFlashcardLevelFilter}
-                          showAddCardModal={showAddCardModal}
-                          setShowAddCardModal={setShowAddCardModal}
-                          newCardWord={newCardWord}
-                          setNewCardWord={setNewCardWord}
-                          newCardIpa={newCardIpa}
-                          setNewCardIpa={setNewCardIpa}
-                          newCardPartOfSpeech={newCardPartOfSpeech}
-                          setNewCardPartOfSpeech={setNewCardPartOfSpeech}
-                          newCardMeaning={newCardMeaning}
-                          setNewCardMeaning={setNewCardMeaning}
-                          newCardExample={newCardExample}
-                          setNewCardExample={setNewCardExample}
-                          newCardExampleTranslation={newCardExampleTranslation}
-                          setNewCardExampleTranslation={setNewCardExampleTranslation}
-                          newCardLevel={newCardLevel}
-                          setNewCardLevel={setNewCardLevel}
-                          onAddFlashcard={handleAddFlashcard}
-                          onDeleteFlashcard={deleteCustomFlashcard}
-                          filteredFlashcards={filteredFlashcards}
-                          speakText={speakText}
-                        />
-                      )}
+                        {activeTab === "flashcards" && (
+                          <FlashcardsPanel
+                            flashcardSearch={flashcardSearch}
+                            setFlashcardSearch={setFlashcardSearch}
+                            flashcardLevelFilter={flashcardLevelFilter}
+                            setFlashcardLevelFilter={setFlashcardLevelFilter}
+                            showAddCardModal={showAddCardModal}
+                            setShowAddCardModal={setShowAddCardModal}
+                            newCardWord={newCardWord}
+                            setNewCardWord={setNewCardWord}
+                            newCardIpa={newCardIpa}
+                            setNewCardIpa={setNewCardIpa}
+                            newCardPartOfSpeech={newCardPartOfSpeech}
+                            setNewCardPartOfSpeech={setNewCardPartOfSpeech}
+                            newCardMeaning={newCardMeaning}
+                            setNewCardMeaning={setNewCardMeaning}
+                            newCardExample={newCardExample}
+                            setNewCardExample={setNewCardExample}
+                            newCardExampleTranslation={newCardExampleTranslation}
+                            setNewCardExampleTranslation={setNewCardExampleTranslation}
+                            newCardLevel={newCardLevel}
+                            setNewCardLevel={setNewCardLevel}
+                            onAddFlashcard={handleAddFlashcard}
+                            onDeleteFlashcard={deleteCustomFlashcard}
+                            filteredFlashcards={filteredFlashcards}
+                            speakText={speakText}
+                          />
+                        )}
+                      </Suspense>
                     </div>
                   </div>
                 )}
 
                 {mainTab === "achievements" && (
-                  <AchievementsWorkspace
-                    conversationsHad={conversationsHad}
-                    quizScore={quizScore}
-                    quizAttempts={quizAttempts}
-                    customFlashcardsCount={customFlashcards.length + PRESET_FLASHCARDS.length}
-                    unlockedLevel={unlockedLevel}
-                    completedLevels={completedLevels}
-                    completedGroupsProp={completedGroups}
-                    analyzedCountProp={analyzedCount}
-                    onResetProgress={resetAllLevelsProgress}
-                    DAILY_QUOTES={DAILY_QUOTES}
-                    quoteIndex={quoteIndex}
-                    setQuoteIndex={setQuoteIndex}
-                    points={points}
-                    completedWordsCount={completedWordsCount}
-                    studentSemester={studentSemester}
-                    completedWordKeys={completedWordKeys}
-                  />
+                  <Suspense fallback={<div className="p-12 text-center text-purple-600 font-bold" dir="rtl">جاري تحميل صفحة الإنجازات... 🏆</div>}>
+                    <AchievementsWorkspace
+                      conversationsHad={conversationsHad}
+                      quizScore={quizScore}
+                      quizAttempts={quizAttempts}
+                      customFlashcardsCount={customFlashcards.length + PRESET_FLASHCARDS.length}
+                      unlockedLevel={unlockedLevel}
+                      completedLevels={completedLevels}
+                      completedGroupsProp={completedGroups}
+                      analyzedCountProp={analyzedCount}
+                      onResetProgress={resetAllLevelsProgress}
+                      DAILY_QUOTES={DAILY_QUOTES}
+                      quoteIndex={quoteIndex}
+                      setQuoteIndex={setQuoteIndex}
+                      points={points}
+                      completedWordsCount={completedWordsCount}
+                      studentSemester={studentSemester}
+                      completedWordKeys={completedWordKeys}
+                    />
+                  </Suspense>
                 )}
 
                 {mainTab === "about" && (
-                  <AboutWorkspace />
+                  <Suspense fallback={<div className="p-12 text-center text-purple-600 font-bold" dir="rtl">جاري تحميل معلومات التطبيق... ℹ️</div>}>
+                    <AboutWorkspace />
+                  </Suspense>
                 )}
 
                 {mainTab === "support" && (
@@ -3750,7 +3758,9 @@ export default function App() {
               </nav>
 
               {/* Educational Learning Stopwatch Timer */}
-              <LearningTimer isLoggedIn={isLoggedIn} uid={auth.currentUser?.uid} />
+              <Suspense fallback={null}>
+                <LearningTimer isLoggedIn={isLoggedIn} uid={auth.currentUser?.uid} />
+              </Suspense>
             </>
 
         </div>
