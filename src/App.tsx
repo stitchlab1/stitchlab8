@@ -80,6 +80,7 @@ export default function App() {
   // Splash Screen State
   const [showSplash, setShowSplash] = useState<boolean>(true);
   const [splashProgress, setSplashProgress] = useState<number>(0);
+  const [showIntroS, setShowIntroS] = useState<boolean>(false);
 
   // Detect if the user is running inside the mobile app/webview wrapper
   const [isAppMode] = useState<boolean>(() => {
@@ -208,13 +209,19 @@ export default function App() {
       }
     }, 95); // 95ms * 100 = 9500ms, reaching 100 smoothly before 10 seconds
 
+    let introTimer: NodeJS.Timeout;
     const timer = setTimeout(() => {
       setShowSplash(false);
+      setShowIntroS(true);
+      introTimer = setTimeout(() => {
+        setShowIntroS(false);
+      }, 2200); // 2.2 seconds animation
     }, 10000); // 10 seconds (شاشة ترحيبية بيضاء لمدة 10 ثوان)
 
     return () => {
       clearInterval(interval);
       clearTimeout(timer);
+      if (introTimer) clearTimeout(introTimer);
     };
   }, []);
 
@@ -2473,24 +2480,53 @@ export default function App() {
         <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-purple-300/10 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="max-w-md w-full relative z-10 space-y-6">
-          <div className="text-center space-y-6 animate-fadeIn">
-            <div className="flex flex-col items-center justify-center space-y-2">
-              <span className="text-7xl md:text-9xl font-black text-purple-600 tracking-tight font-mono select-none">
-                {splashProgress}
-              </span>
-              <span className="text-3xl font-extrabold tracking-widest text-pink-500 font-sans mt-1 select-none">
-                stitchlab
-              </span>
+          <div className="text-center space-y-8 animate-fadeIn flex flex-col items-center justify-center">
+            
+            {/* Elegant Circular Progress Gauge */}
+            <div className="relative w-48 h-48 flex items-center justify-center select-none">
+              <svg className="w-48 h-48 transform -rotate-90">
+                <defs>
+                  <linearGradient id="splashGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#9333EA" /> {/* purple-600 */}
+                    <stop offset="100%" stopColor="#EC4899" /> {/* pink-500 */}
+                  </linearGradient>
+                </defs>
+                {/* Background Track Circle */}
+                <circle
+                  className="stroke-pink-100/80"
+                  strokeWidth="8"
+                  fill="transparent"
+                  r="80"
+                  cx="96"
+                  cy="96"
+                />
+                {/* Active Dynamic Progress Circle */}
+                <motion.circle
+                  stroke="url(#splashGradient)"
+                  strokeWidth="10"
+                  strokeDasharray={502.65}
+                  strokeDashoffset={502.65 - (splashProgress / 100) * 502.65}
+                  strokeLinecap="round"
+                  fill="transparent"
+                  r="80"
+                  cx="96"
+                  cy="96"
+                  className="transition-all duration-100 ease-linear"
+                />
+              </svg>
+              {/* Counter Text in Center */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-5xl font-black text-purple-600 font-mono tracking-tight select-none">
+                  {splashProgress}%
+                </span>
+              </div>
             </div>
-            {/* Progress Bar Indicator for 10 seconds */}
-            <div className="w-56 h-2 md:h-2.5 bg-pink-100/60 mx-auto rounded-full overflow-hidden relative border border-pink-200/50">
-              <motion.div 
-                className="h-full bg-gradient-to-r from-purple-600 via-pink-500 to-purple-700 rounded-full"
-                initial={{ width: "0%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: 10, ease: "linear" }}
-              />
-            </div>
+
+            {/* Application Name text underneath */}
+            <span className="text-4xl font-black tracking-widest text-pink-500 font-sans select-none animate-pulse">
+              stitchlab
+            </span>
+
           </div>
         </div>
       </main>
@@ -2523,6 +2559,39 @@ export default function App() {
   return (
     <div id="stitchlab-main" className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-purple-500 selection:text-white" dir="rtl">
       
+      {/* Absolute floating intro S animation */}
+      <AnimatePresence>
+        {showIntroS && (
+          <motion.div
+            className="fixed inset-0 flex items-center justify-center z-[99999] pointer-events-none bg-white/20 backdrop-blur-xs"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.span
+              className="text-9xl md:text-[14rem] font-black text-purple-600 font-sans tracking-tight filter drop-shadow-2xl"
+              initial={{ rotate: 0, scale: 0.1, opacity: 0 }}
+              animate={{ rotate: 720, scale: 1.2, opacity: 1 }}
+              exit={{ 
+                scale: 0.1, 
+                rotate: 1080,
+                // Glide towards top-right area (logo position in RTL)
+                x: "40vw",
+                y: "-45vh",
+                opacity: 0,
+              }}
+              transition={{ 
+                initial: { duration: 0 },
+                animate: { duration: 1.2, ease: "easeOut" },
+                exit: { duration: 0.8, ease: "easeInOut" }
+              }}
+            >
+              S
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* 1. NOT LOGGED IN LAYOUT / OR LOADING SATELLITE */}
       {showEmailVerificationScreen && auth.currentUser ? (
         <div id="stitchlab-email-verify-step" className="flex min-h-screen flex-col items-center justify-center p-4 md:p-8 bg-gradient-to-br from-pink-50 via-[#FFF9FB] to-purple-50 text-slate-800 relative overflow-hidden" dir="rtl">
@@ -2532,15 +2601,11 @@ export default function App() {
           
           <div className="w-full max-w-md space-y-6 relative z-10 text-center animate-fadeIn">
             <div className="space-y-2">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white border border-pink-100 shadow-xl overflow-hidden mb-2 p-1.5">
-                <img 
-                  src="/stitchlab_icon_hd.png" 
-                  alt="stitchLab Logo" 
-                  referrerPolicy="no-referrer" 
-                  width={80}
-                  height={80}
-                  className="w-full h-full aspect-square object-contain" 
-                />
+              <div className="inline-flex items-center justify-center mb-2">
+                <h2 className="text-4xl font-black font-sans tracking-tight">
+                  <span className="text-purple-600">Stitch</span>
+                  <span className="text-pink-500">lab</span>
+                </h2>
               </div>
               <h1 id="email-verify-heading" className="text-3xl font-extrabold text-purple-950 tracking-tight">
                 تأكيد البريد الإلكتروني ✉️
@@ -3232,13 +3297,14 @@ export default function App() {
               <header className="border-b border-pink-100 bg-white/95 backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 py-3.5 shadow-[0_12px_35px_rgba(236,72,153,0.03)] relative z-10">
                 <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
                   
-                  <div className="flex items-center gap-1 select-none">
-                    <h1 className="font-sans font-black text-2xl tracking-tight flex items-center">
+                  <div className="flex items-center select-none">
+                    <h1 className="font-sans font-black text-2xl tracking-tight flex items-center leading-none">
                       <motion.span 
-                        className="text-purple-600 inline-block font-extrabold"
+                        className="text-purple-600 inline-block"
                         initial={{ rotate: 0 }}
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1.5, ease: "easeInOut" }}
+                        style={{ display: "inline-block" }}
                       >
                         S
                       </motion.span>

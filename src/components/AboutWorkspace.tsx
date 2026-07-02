@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "motion/react";
 
 export default function AboutWorkspace() {
   return (
@@ -9,7 +10,18 @@ export default function AboutWorkspace() {
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
         <div className="flex items-center gap-4 relative z-10">
           <div>
-            <h2 className="text-2xl font-black font-serif tracking-tight">StitchLab</h2>
+            <h2 className="text-3xl font-black font-sans tracking-tight flex items-center leading-none select-none">
+              <motion.span 
+                className="text-white inline-block font-black"
+                initial={{ rotate: 0 }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1.5, ease: "easeInOut" }}
+                style={{ display: "inline-block" }}
+              >
+                S
+              </motion.span>
+              <span className="text-white">titchlab</span>
+            </h2>
             <p className="text-[10px] text-indigo-100 font-semibold tracking-wider uppercase mt-1 antialiased">
               مساحة تعليمية مبتكرة
             </p>
